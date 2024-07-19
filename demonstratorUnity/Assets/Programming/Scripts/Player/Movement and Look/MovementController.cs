@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class MovementController : MonoBehaviour
@@ -26,6 +25,8 @@ public class MovementController : MonoBehaviour
 	[SerializeField]
 	private float _turnSpeed = 0.5f;
 
+	private bool _isGrounded = false;
+
 	private Rigidbody rb;
 
 	// Start is called before the first frame update
@@ -34,14 +35,25 @@ public class MovementController : MonoBehaviour
 		rb = GetComponent<Rigidbody>();
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
+
+	}
+
+	// Update is called once per frame
+	void FixedUpdate()
+	{
+		RaycastHit hit;
+		_isGrounded = Physics.Raycast(rb.position, Vector3.down, out hit, 1.1f);
+
+
+
+
 		Vector3 wishDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
 		// we want to go forward.
 		// so we add a force to the player.
-		if (wishDir.z > 0)
+		if (wishDir.z > 0 && _isGrounded)
 		{
 
 			Vector3 targ = ((_orientation.forward * _targetSpeed) - rb.velocity) * _accellerationRate;
@@ -54,7 +66,7 @@ public class MovementController : MonoBehaviour
 
 
 		}
-		else if (wishDir.z < 0)
+		else if (wishDir.z < 0 && _isGrounded)
 		{
 			Vector3 targ = -rb.velocity * _deAccellerationRate;
 
@@ -72,7 +84,7 @@ public class MovementController : MonoBehaviour
 		}
 
 		// rotate the player
-		if (wishDir.x != 0)
+		if (wishDir.x != 0 && _isGrounded)
 		{
 
 			_orientation.Rotate(_orientation.up * wishDir.x * _turnSpeed);
@@ -85,7 +97,18 @@ public class MovementController : MonoBehaviour
 			rb.AddForce(targ, ForceMode.Force);
 		}
 
-		print(rb.velocity + " | " + rb.velocity.magnitude);
+		if (_isGrounded && Vector3.Dot(hit.normal, Vector3.up) > 0.99f)
+		{
+			_orientation.rotation = Quaternion.Euler(0, _orientation.eulerAngles.y, 0);
+		}
+		else if (_isGrounded)
+		{
+			_orientation.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+		}
+
+		print(Vector3.Dot(hit.normal, Vector3.up));
+
+		//print(rb.velocity + " | " + rb.velocity.magnitude);
 
 	}
 }
