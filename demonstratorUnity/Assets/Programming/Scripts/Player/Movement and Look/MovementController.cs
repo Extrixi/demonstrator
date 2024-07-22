@@ -8,6 +8,9 @@ public class MovementController : MonoBehaviour
 	private Transform _orientation;
 
 	[SerializeField]
+	private Transform _playerModel;
+
+	[SerializeField]
 	private float _targetSpeed = 30;
 
 	[SerializeField]
@@ -97,16 +100,18 @@ public class MovementController : MonoBehaviour
 			rb.AddForce(targ, ForceMode.Force);
 		}
 
-		if (_isGrounded && Vector3.Dot(hit.normal, Vector3.up) > 0.99f)
-		{
-			_orientation.rotation = Quaternion.Euler(0, _orientation.eulerAngles.y, 0);
-		}
-		else if (_isGrounded)
-		{
-			_orientation.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-		}
+		// an attempt at slope rotation, but I really dont want to touch 4d (technically 6x 3d). I rather do this later. :3
 
-		print(Vector3.Dot(hit.normal, Vector3.up));
+		// if (_isGrounded && Vector3.Dot(hit.normal, Vector3.up) > 0.99f)
+		// {
+		// 	_playerModel.localRotation = Quaternion.identity;
+		// }
+		// else if (_isGrounded)
+		// {
+		// 	_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+		// }
+
+		// print(Vector3.Dot(hit.normal, Vector3.up));
 
 		//print(rb.velocity + " | " + rb.velocity.magnitude);
 
