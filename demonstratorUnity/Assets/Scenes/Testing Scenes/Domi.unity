@@ -2973,7 +2973,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh29846
+  m_Name: pb_Mesh34626
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2
@@ -3611,6 +3611,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2062274427644345917, guid: 97f203fbabea5b64b8e54a2f2d0bebe6,
+        type: 3}
+      propertyPath: _playerModel
+      value: 
+      objectReference: {fileID: 6731169187746741937}
     - target: {fileID: 5965334081424222578, guid: 97f203fbabea5b64b8e54a2f2d0bebe6,
         type: 3}
       propertyPath: m_Name
@@ -3671,13 +3676,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97f203fbabea5b64b8e54a2f2d0bebe6, type: 3}
+--- !u!4 &6731169187746741937 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 707610321887731831, guid: 97f203fbabea5b64b8e54a2f2d0bebe6,
+    type: 3}
+  m_PrefabInstance: {fileID: 6731169187746741936}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1338940707}
   - {fileID: 1049265831}
-  - {fileID: 6731169187746741936}
   - {fileID: 177892290}
   - {fileID: 651399769}
   - {fileID: 553977816}
+  - {fileID: 6731169187746741936}

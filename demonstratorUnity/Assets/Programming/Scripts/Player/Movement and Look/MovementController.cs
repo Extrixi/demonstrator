@@ -90,7 +90,7 @@ public class MovementController : MonoBehaviour
 		if (wishDir.x != 0 && _isGrounded)
 		{
 
-			_orientation.Rotate(_orientation.up * wishDir.x * _turnSpeed);
+			_orientation.Rotate(Vector3.up * wishDir.x * _turnSpeed);
 
 			Vector3 targ = (_orientation.right * wishDir.x * _turnForce + _orientation.forward * _turnForce).normalized * rb.velocity.magnitude - rb.velocity;
 
@@ -108,7 +108,7 @@ public class MovementController : MonoBehaviour
 		// }
 		// else if (_isGrounded)
 		// {
-		// 	_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+		_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
 		// }
 
 		// print(Vector3.Dot(hit.normal, Vector3.up));
