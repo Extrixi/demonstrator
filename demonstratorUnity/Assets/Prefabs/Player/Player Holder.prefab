@@ -459,12 +459,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _orientation: {fileID: 1312018499809277346}
-  _targetSpeed: 30
-  _accellerationRate: 0.1
+  _playerModel: {fileID: 330068334220846131}
+  _targetSpeed: 23
+  _accellerationRate: 0.4
   _deAccellerationRate: 0.5
-  _turnForce: 10
-  _minimumStopSpeed: 0.1
-  _turnSpeed: 0.5
+  _turnForce: 6
+  _minimumStopSpeed: 3.5
+  _turnSpeed: 1.5
 --- !u!114 &5545050363549643344
 MonoBehaviour:
   m_ObjectHideFlags: 0
