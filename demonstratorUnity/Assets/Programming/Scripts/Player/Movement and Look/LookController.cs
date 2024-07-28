@@ -20,6 +20,10 @@ public class LookController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		// TODO very simple 3rd person cam. planning to replace with the cinimachine version. this sucks.
+
+		// dont bother. verysimple rotate camera based on inputs from mouse axis.
+
 		Vector2 MouseLook = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
 		_yRotation -= MouseLook.y * Sense;

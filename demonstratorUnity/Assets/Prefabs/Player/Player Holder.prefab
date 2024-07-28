@@ -459,7 +459,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _orientation: {fileID: 1312018499809277346}
-  _playerModel: {fileID: 330068334220846131}
+  _playerModel: {fileID: 707610321887731831}
   _targetSpeed: 23
   _accellerationRate: 0.4
   _deAccellerationRate: 0.5
