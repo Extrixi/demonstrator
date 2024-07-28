@@ -372,6 +372,7 @@ GameObject:
   - component: {fileID: 8433862468323880613}
   - component: {fileID: 2062274427644345917}
   - component: {fileID: 5545050363549643344}
+  - component: {fileID: 7170794678614363631}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -458,6 +459,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f402dd55f7bc9b45b8509866c5e2871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsEnabled: 1
+  IsLocked: 0
   _orientation: {fileID: 1312018499809277346}
   _playerModel: {fileID: 707610321887731831}
   _targetSpeed: 23
@@ -465,7 +468,9 @@ MonoBehaviour:
   _deAccellerationRate: 0.5
   _turnForce: 6
   _minimumStopSpeed: 3.5
-  _turnSpeed: 1.5
+  _maxTurnSpeed: 1.5
+  _minTurnSpeed: 3
+  _airTurnSpeed: 2
 --- !u!114 &5545050363549643344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,8 +483,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11c011ce6b8814499a281f133f95f9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  IsEnabled: 1
+  IsLocked: 0
   CameraHolder: {fileID: 119498477980253484}
   Sense: 1
+--- !u!114 &7170794678614363631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5765995149839008897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633eefb0d7d93f14081be6085f57a3e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5965334081424222578
 GameObject:
   m_ObjectHideFlags: 0

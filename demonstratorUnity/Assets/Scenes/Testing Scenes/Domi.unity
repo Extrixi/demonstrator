@@ -3611,16 +3611,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2062274427644345917, guid: 97f203fbabea5b64b8e54a2f2d0bebe6,
-        type: 3}
-      propertyPath: _maxTurnSpeed
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2062274427644345917, guid: 97f203fbabea5b64b8e54a2f2d0bebe6,
-        type: 3}
-      propertyPath: _minTurnSpeed
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 5965334081424222578, guid: 97f203fbabea5b64b8e54a2f2d0bebe6,
         type: 3}
       propertyPath: m_Name

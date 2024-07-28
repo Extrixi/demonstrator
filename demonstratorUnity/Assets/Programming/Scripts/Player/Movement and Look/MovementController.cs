@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour
 {
+	public bool IsEnabled = true;
+
+	public bool IsLocked = false;
+
+
 	[SerializeField]
 	private Transform _orientation;
 
@@ -48,12 +53,16 @@ public class MovementController : MonoBehaviour
 
 	void Update()
 	{
+		_playerModel.gameObject.SetActive(IsEnabled);
 
+		if (IsLocked) return;
 	}
 
 	// Update is called once per frame
 	void FixedUpdate()
 	{
+		if (!IsEnabled || IsLocked) return;
+
 		RaycastHit hit;
 
 		// This determins where the raycast comes from. Because the player has "two"  points to rotate.
