@@ -41,6 +41,9 @@ public class MovementController : MonoBehaviour
 	[SerializeField]
 	private float _airTurnSpeed = 2f;
 
+	[SerializeField]
+	private float _jumpForce = 3f;
+
 	private bool _isGrounded = false;
 
 	private Rigidbody rb;
@@ -144,6 +147,13 @@ public class MovementController : MonoBehaviour
 
 			// add the force to the player.
 			rb.AddForce(targ, ForceMode.Force);
+		}
+
+		if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
+		{
+			rb.AddForce(_orientation.up * _jumpForce, ForceMode.Force);
+
+			print("jumped");
 		}
 
 
