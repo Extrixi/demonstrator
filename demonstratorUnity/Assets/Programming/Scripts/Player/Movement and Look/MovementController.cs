@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class MovementController : MonoBehaviour
@@ -46,12 +47,14 @@ public class MovementController : MonoBehaviour
 
 	private bool _isGrounded = false;
 
-	private Rigidbody rb;
+	private Rigidbody _rb;
+
+	private RaycastHit _hit;
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		rb = GetComponent<Rigidbody>();
+		_rb = GetComponent<Rigidbody>();
 	}
 
 	void Update()
@@ -59,14 +62,6 @@ public class MovementController : MonoBehaviour
 		_playerModel.gameObject.SetActive(IsEnabled);
 
 		if (IsLocked) return;
-	}
-
-	// Update is called once per frame
-	void FixedUpdate()
-	{
-		if (!IsEnabled || IsLocked) return;
-
-		RaycastHit hit;
 
 		// This determins where the raycast comes from. Because the player has "two"  points to rotate.
 		// The first is the player rotation of the model, we can raycast straight down from the player's perspective.
@@ -75,12 +70,42 @@ public class MovementController : MonoBehaviour
 		if (_isGrounded)
 		{
 			// we also store a hit. this is used to rotated the player and for slope calcs.
-			_isGrounded = Physics.Raycast(_playerModel.position, -_playerModel.transform.up, out hit, 1.1f);
+			_isGrounded = Physics.Raycast(_playerModel.position, -_playerModel.transform.up, out _hit, 1.1f);
 		}
 		else
 		{
-			_isGrounded = Physics.Raycast(rb.position, Vector3.down, out hit, 1.1f);
+			_isGrounded = Physics.Raycast(_rb.position, Vector3.down, out _hit, 1.1f);
 		}
+
+		if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
+		{
+			//rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+
+			Vector3 addition = new Vector3(0, -_rb.velocity.y, 0);
+
+			Vector3 Force = new Vector3();
+
+			if (_rb.velocity.y < 0)
+			{
+				Force = addition + _orientation.up * _jumpForce;
+			}
+			else
+			{
+				Force = _orientation.up * _jumpForce;
+			}
+
+
+
+			_rb.AddForce(Force, ForceMode.Impulse);
+
+			print("jumped");
+		}
+	}
+
+	// Update is called once per frame
+	void FixedUpdate()
+	{
+		if (!IsEnabled || IsLocked) return;
 
 
 
@@ -88,7 +113,7 @@ public class MovementController : MonoBehaviour
 		Vector3 wishDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
 		// the current turn speed based on current player velocity.
-		_currentTurnSpeed = Mathf.Lerp(_maxTurnSpeed, _minTurnSpeed, rb.velocity.magnitude / _targetSpeed);
+		_currentTurnSpeed = Mathf.Lerp(_maxTurnSpeed, _minTurnSpeed, _rb.velocity.magnitude / _targetSpeed);
 
 		// funny math, could be used later.
 		//print(Mathf.Abs(Mathf.Log(rb.velocity.magnitude / _targetSpeed)) / 10f);
@@ -99,13 +124,13 @@ public class MovementController : MonoBehaviour
 		{
 			// we get a forward vector based on the player and convert it into an acceleration.
 			// we get the required force needed to reach the target speed with current velocity then we reduce it so it accelerates.
-			Vector3 targ = ((_orientation.forward * _targetSpeed) - rb.velocity) * _accellerationRate;
+			Vector3 targ = ((_orientation.forward * _targetSpeed) - _rb.velocity) * _accellerationRate;
 
 			// we dont want to effect the y. otherwise we fly or go down to hell.
 			targ.y = 0;
 
 			// we add the fore to the player.
-			rb.AddForce(targ, ForceMode.Force);
+			_rb.AddForce(targ, ForceMode.Force);
 
 
 
@@ -114,20 +139,20 @@ public class MovementController : MonoBehaviour
 		else if (wishDir.z < 0 && _isGrounded)
 		{
 			// we get the invert vector of the current velocity, then reduce the vector so it deaccelerates the player.
-			Vector3 targ = -rb.velocity * _deAccellerationRate;
+			Vector3 targ = -_rb.velocity * _deAccellerationRate;
 
 			// dont effect the Y.
 			targ.y = 0;
 
 			// if the speed is below the minimum stop speed, then just reset the velocity.
 			// Otherwise, just add the deacceleration speed to the player.
-			if (rb.velocity.magnitude < _minimumStopSpeed)
+			if (_rb.velocity.magnitude < _minimumStopSpeed)
 			{
-				rb.velocity = new Vector3(0, rb.velocity.y, 0);
+				_rb.velocity = new Vector3(0, _rb.velocity.y, 0);
 			}
 			else
 			{
-				rb.AddForce(targ, ForceMode.Force);
+				_rb.AddForce(targ, ForceMode.Force);
 			}
 
 		}
@@ -140,28 +165,23 @@ public class MovementController : MonoBehaviour
 
 			// we get the vector that is |_ => / a diagonal from right and forward. then add a force. 
 			// want to make this into a lerp between a forward and side vector.
-			Vector3 targ = (_orientation.right * wishDir.x * _turnForce + _orientation.forward * _turnForce).normalized * rb.velocity.magnitude - rb.velocity;
+			Vector3 targ = (_orientation.right * wishDir.x * _turnForce + _orientation.forward * _turnForce).normalized * _rb.velocity.magnitude - _rb.velocity;
 
 			// DONT EFFECT Y.
 			targ.y = 0;
 
 			// add the force to the player.
-			rb.AddForce(targ, ForceMode.Force);
+			_rb.AddForce(targ, ForceMode.Force);
 		}
 
-		if (_isGrounded && Input.GetKeyDown(KeyCode.Space))
-		{
-			rb.AddForce(_orientation.up * _jumpForce, ForceMode.Force);
 
-			print("jumped");
-		}
 
 
 		// if we are grounded we can rotate the player's model to the angle of the floor.
 		// if not, the player can rotate the player character in the air.
 		if (_isGrounded)
 		{
-			_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+			_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
 		}
 		else
 		{
