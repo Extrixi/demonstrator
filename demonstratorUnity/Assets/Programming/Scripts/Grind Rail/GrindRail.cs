@@ -6,14 +6,20 @@ using UnityEngine.Splines;
 
 public class GrindRail : MonoBehaviour
 {
-	public SplineContainer splineCont;
+	public SplineContainer SplineContainer;
 
-	public Vector3 pos = Vector3.zero;
+
+#if UNITY_EDITOR
+	[Header("DEBUGGING")]
+	public bool DebugEnabled = false;
+
+	public Vector3 BluePos = Vector3.zero;
+#endif
 
 	// Start is called before the first frame update
 	void Start()
 	{
-		splineCont = GetComponent<SplineContainer>();
+		SplineContainer = GetComponent<SplineContainer>();
 
 	}
 
@@ -28,39 +34,53 @@ public class GrindRail : MonoBehaviour
 
 		if (other.transform.tag == "Player")
 		{
-			other.transform.GetComponentInChildren<GrindSystem>().StartGrind(splineCont);
+			other.transform.GetComponentInChildren<GrindSystem>().StartGrind(SplineContainer);
 		}
 
 
 	}
 
-
+#if UNITY_EDITOR
 	void OnDrawGizmos()
 	{
-		NativeSpline nsplis = new NativeSpline(GetComponent<SplineContainer>().Splines[0]);
-		SplineUtility.GetNearestPoint(nsplis, transform.rotation * (pos - transform.position), out float3 nearest, out float t);
 
-		Gizmos.color = Color.red;
-		Gizmos.DrawRay(transform.position, transform.rotation * Vector3.right);
+		if (!DebugEnabled) return;
+
+		NativeSpline nsplis = new NativeSpline(GetComponent<SplineContainer>().Splines[0]);
+		// converting local space into world space because float3 is not in local and the transofrm is.
+		SplineUtility.GetNearestPoint(nsplis, Quaternion.Inverse(transform.rotation) * (BluePos - transform.position), out float3 nearest, out float t);
+
 
 		Gizmos.color = Color.green;
 		Vector3 posis = (transform.rotation * (Vector3)nearest) + transform.position;
 
 		Gizmos.DrawSphere(posis, 0.5f);
 
-		Vector3 forward = Vector3.Normalize(nsplis.EvaluateUpVector(t));
-		Vector3 up = new NativeSpline(GetComponent<SplineContainer>().Splines[0]).EvaluateUpVector(t);
+		// we take the spline lerp ammount between two points and plug that in to find the up vector. we store this.
+		Vector3 forward = Vector3.Normalize(nsplis.EvaluateTangent(t));
+		// we store this to the vector.
+		Vector3 up = nsplis.EvaluateUpVector(t);
 
+		// vector moment. World space btw.
 		Vector3 remappedForward = new Vector3(0, 0, 1);
 		Vector3 remappedUp = new Vector3(0, 1, 0);
-		Quaternion axisRemapRotation = Quaternion.Inverse(Quaternion.LookRotation(remappedForward, remappedUp)) * transform.rotation;
 
-		Gizmos.color = Color.black;
-		Gizmos.DrawRay(posis, (Quaternion.LookRotation(forward, up) * axisRemapRotation).eulerAngles);
+		// uses the current rotatiojn and adds the spline rotation on top so its aligned with the spline and in local space.
+		Quaternion axisRemapRotation = transform.rotation * Quaternion.Inverse(Quaternion.LookRotation(remappedForward, remappedUp));
 
+		// Quaternion.LookRotation(forward, up) * axisRemapRotation gets the rotation
+
+
+		Gizmos.DrawSphere(posis, 0.5f);
+
+		Gizmos.color = Color.red;
+		Gizmos.DrawRay(posis, Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.right);
+		Gizmos.color = Color.green;
+		Gizmos.DrawRay(posis, Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.up);
 
 
 		Gizmos.color = Color.blue;
-		Gizmos.DrawSphere(pos, 0.5f);
+		Gizmos.DrawSphere(BluePos, 0.5f);
 	}
+#endif
 }
