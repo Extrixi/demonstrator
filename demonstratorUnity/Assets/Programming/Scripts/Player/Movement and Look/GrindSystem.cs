@@ -145,6 +145,7 @@ public class GrindSystem : MonoBehaviour
 
 	}
 
+
 	private IEnumerator StopGrindingIEnumerator()
 	{
 		yield return new WaitForSeconds(2f);
