@@ -6,10 +6,14 @@ using UnityEngine.Splines;
 
 public class GrindSystem : MonoBehaviour
 {
-	public SplineContainer splineContainer;
+	public SplineContainer SplineContainer;
+
+	public Transform SplineContainerTransform;
+
+	private NativeSpline native;
 
 
-	public bool isGrinding = false;
+	public bool IsGrinding = false;
 
 	public float YAxisOffSet = 3f;
 	public float XAxisOffSet = 1f;
@@ -19,15 +23,11 @@ public class GrindSystem : MonoBehaviour
 
 	private Rigidbody rb;
 
-	private Transform parent;
-
 	private MovementController movementController;
 
+	private Vector3 remappedForward = new Vector3(0, 0, 1);
+	private Vector3 remappedUp = new Vector3(0, 1, 0);
 
-	public void HitJunction(Spline rail)
-	{
-		currentSpline = rail;
-	}
 
 	private void Start()
 	{
@@ -40,25 +40,29 @@ public class GrindSystem : MonoBehaviour
 
 	public void StartGrind(SplineContainer splineComp)
 	{
-		splineContainer = splineComp;
+		SplineContainer = splineComp;
 
-		currentSpline = splineContainer.Splines[0];
+		SplineContainerTransform = splineComp.transform;
 
-		splineContainer.GetComponent<Collider>().enabled = false;
+		currentSpline = SplineContainer.Splines[0];
+
+		native = new NativeSpline(currentSpline);
+
+		SplineContainer.GetComponent<Collider>().enabled = false;
 
 		movementController.IsLocked = true;
 
 
 		rb.useGravity = false;
 
-		isGrinding = true;
+		IsGrinding = true;
 	}
 
 	public void StopGrinding()
 	{
-		isGrinding = false;
+		IsGrinding = false;
 
-		rb.useGravity = true; // TODO change into manager
+		rb.useGravity = true;
 
 		movementController.IsLocked = false;
 
@@ -69,7 +73,7 @@ public class GrindSystem : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		if (!isGrinding || splineContainer == null)
+		if (!IsGrinding || SplineContainer == null)
 		{
 			return;
 		}
@@ -101,17 +105,17 @@ public class GrindSystem : MonoBehaviour
 
 		//movementController.isGrounded = true;
 
-		NativeSpline native = new NativeSpline(currentSpline);
-		float distance = SplineUtility.GetNearestPoint(native, transform.position - splineContainer.transform.position, out float3 nearest, out float t);
 
-		transform.position = nearest + new float3(0, 1 * YAxisOffSet, 0) + new float3(1 * XAxisOffSet, 0, 0) + (float3)splineContainer.transform.position;
+		SplineUtility.GetNearestPoint(native, Quaternion.Inverse(SplineContainerTransform.rotation) * (transform.position - SplineContainerTransform.position), out float3 nearest, out float t);
+
+		transform.position = (SplineContainerTransform.rotation * (Vector3)nearest) + SplineContainerTransform.position;
 
 		Vector3 forward = Vector3.Normalize(native.EvaluateTangent(t));
 		Vector3 up = native.EvaluateUpVector(t);
 
 		Vector3 remappedForward = new Vector3(0, 0, 1);
 		Vector3 remappedUp = new Vector3(0, 1, 0);
-		Quaternion axisRemapRotation = Quaternion.Inverse(Quaternion.LookRotation(remappedForward, remappedUp));
+		Quaternion axisRemapRotation = SplineContainerTransform.rotation * Quaternion.Inverse(Quaternion.LookRotation(remappedForward, remappedUp));
 
 		movementController.Orientation.rotation = Quaternion.LookRotation(forward, up) * axisRemapRotation;
 
@@ -120,26 +124,34 @@ public class GrindSystem : MonoBehaviour
 		// Vector3 wishDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
 
-		if (rb.velocity.magnitude > movementController.TargetSpeed)
-		{
-			float y = rb.velocity.y;
+		// if (rb.velocity.magnitude > 5f)
+		// {
+		// 	float y = rb.velocity.y;
 
-			Vector3 newVel = rb.velocity.normalized * movementController.TargetSpeed;
+		// 	Vector3 newVel = rb.velocity.normalized * movementController.TargetSpeed;
 
-			newVel.y = y;
+		// 	newVel.y = y;
 
-			rb.velocity = newVel;
-		}
+		// 	rb.velocity = newVel;
+		// }
 
 		if (Input.GetKey(KeyCode.S))
 		{
-			rb.AddForce((-movementController.Orientation.forward * movementController.TargetSpeed) - rb.velocity, ForceMode.Force);
+			rb.AddForce((Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.back) * 2f, ForceMode.Force);
+
+
 			// newForward *= -1;
 		}
 		else if (Input.GetKey(KeyCode.W))
 		{
-			rb.AddForce((movementController.Orientation.forward * movementController.TargetSpeed) - rb.velocity, ForceMode.Force);
+			rb.AddForce((Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.forward) * 2f, ForceMode.Force);
+
+
+
 		}
+
+		Debug.DrawRay(transform.position, (Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.back), Color.red);
+		Debug.DrawRay(transform.position, (Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.back), Color.blue);
 
 		// rb.velocity = rb.velocity.magnitude * newForward;
 
@@ -150,7 +162,7 @@ public class GrindSystem : MonoBehaviour
 	{
 		yield return new WaitForSeconds(2f);
 
-		splineContainer.GetComponent<Collider>().enabled = true;
+		SplineContainer.GetComponent<Collider>().enabled = true;
 
 	}
 }

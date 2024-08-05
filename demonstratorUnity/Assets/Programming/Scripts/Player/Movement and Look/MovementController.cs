@@ -70,7 +70,7 @@ public class MovementController : MonoBehaviour
 
 		if (IsLocked) return;
 
-		if (_grindSystem.isGrinding)
+		if (_grindSystem.IsGrinding)
 		{
 
 			return;
@@ -137,7 +137,7 @@ public class MovementController : MonoBehaviour
 
 
 
-		if (_grindSystem.isGrinding)
+		if (_grindSystem.IsGrinding)
 		{
 
 			return;
