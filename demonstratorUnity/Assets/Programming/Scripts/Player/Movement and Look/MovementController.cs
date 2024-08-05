@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.Intrinsics;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class MovementController : MonoBehaviour
@@ -209,7 +210,9 @@ public class MovementController : MonoBehaviour
 		}
 		else
 		{
-			_playerModel.Rotate(Vector3.right * wishDir.z * _airTurnSpeed + Vector3.forward * wishDir.x * _airTurnSpeed + Vector3.up * wishDir.x * _airTurnSpeed);
+			_playerModel.localRotation = Quaternion.Euler(_playerModel.localRotation.eulerAngles.x, 0, 0);
+			_playerModel.Rotate(Vector3.right * wishDir.z * _airTurnSpeed);
+			Orientation.Rotate(Vector3.up * wishDir.x * _airTurnSpeed);
 		}
 
 	}
