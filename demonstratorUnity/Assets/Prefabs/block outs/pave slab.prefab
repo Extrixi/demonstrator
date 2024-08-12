@@ -320,14 +320,8 @@ MonoBehaviour:
   m_Mesh: {fileID: 0}
   m_VersionIndex: 675
   m_IsSelectable: 1
-  m_SelectedFaces: 05000000
+  m_SelectedFaces: 
   m_SelectedEdges:
-  - a: 21
-    b: 22
-  - a: 22
-    b: 23
-  - a: 23
-    b: 20
   - a: 20
-    b: 21
-  m_SelectedVertices: 17000000150000001600000014000000
+    b: 23
+  m_SelectedVertices: 1400000017000000
