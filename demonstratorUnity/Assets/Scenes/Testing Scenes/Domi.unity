@@ -2815,9 +2815,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67b2f2bbbb3cb1e49acf3e1384fdc3a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  splineCont: {fileID: 651399768}
-  pos: {x: -3.53, y: 1.84, z: 19.5}
+  SplineContainer: {fileID: 0}
   DebugEnabled: 0
+  BluePos: {x: 0, y: 0, z: 0}
 --- !u!43 &784541634
 Mesh:
   m_ObjectHideFlags: 0
@@ -2989,7 +2989,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh30226
+  m_Name: pb_Mesh60814
   serializedVersion: 11
   m_SubMeshes:
   - serializedVersion: 2

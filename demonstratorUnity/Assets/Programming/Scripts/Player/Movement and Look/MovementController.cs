@@ -190,15 +190,29 @@ public class MovementController : MonoBehaviour
 
 			// we get the vector that is |_ => / a diagonal from right and forward. then add a force. 
 			// want to make this into a lerp between a forward and side vector.
-			Vector3 targ = (Orientation.right * wishDir.x * _turnForce + Orientation.forward * _turnForce).normalized * _rb.velocity.magnitude - _rb.velocity;
+			//Vector3 targ = (Orientation.right * wishDir.x * _turnForce + Orientation.forward * _turnForce).normalized * _rb.velocity.magnitude - _rb.velocity;
+
+
+
+			_rb.velocity = Orientation.forward * _rb.velocity.magnitude;
+
 
 			// DONT EFFECT Y.
-			targ.y = 0;
+			// targ.y = 0;
 
 			// add the force to the player.
-			_rb.AddForce(targ, ForceMode.Force);
+			// _rb.AddForce(targ, ForceMode.Force);
 		}
 
+		Vector3 calcVel = _rb.velocity;
+		calcVel.y = 0;
+
+
+		if (isGrounded && Vector3.Dot(calcVel, Orientation.forward) < 0.9f)
+		{
+			_rb.velocity = Orientation.forward * _rb.velocity.magnitude;
+
+		}
 
 
 
@@ -207,6 +221,8 @@ public class MovementController : MonoBehaviour
 		if (isGrounded)
 		{
 			_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
+
+
 		}
 		else
 		{

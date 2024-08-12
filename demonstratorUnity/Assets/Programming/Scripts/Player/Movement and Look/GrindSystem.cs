@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -10,14 +11,12 @@ public class GrindSystem : MonoBehaviour
 
 	public Transform SplineContainerTransform;
 
-	private NativeSpline native;
-
+	public float Threshold = .2f;
 
 	public bool IsGrinding = false;
 
-	public float YAxisOffSet = 3f;
-	public float XAxisOffSet = 1f;
-
+	[Tooltip("The force to apply if the player is not reaching the speed.")]
+	public float MinGrindSpeed = 10f;
 
 	private Spline currentSpline;
 
@@ -25,9 +24,25 @@ public class GrindSystem : MonoBehaviour
 
 	private MovementController movementController;
 
-	private Vector3 remappedForward = new Vector3(0, 0, 1);
-	private Vector3 remappedUp = new Vector3(0, 1, 0);
+	private Quaternion AxisRemap;
 
+	private Vector3 SplinePosition;
+	private Quaternion SplineRotation;
+
+	Vector3 remappedForward = new Vector3(0, 0, 1);
+	Vector3 remappedUp = new Vector3(0, 1, 0);
+
+	Vector3 forward;
+	Vector3 up;
+
+	bool IsGoingForward = false;
+	bool IsFacingRight = false;
+
+	private Vector3 rbVel;
+
+	private float magnitude;
+
+	private bool _useMinGrindSpeed = false;
 
 	private void Start()
 	{
@@ -46,11 +61,47 @@ public class GrindSystem : MonoBehaviour
 
 		currentSpline = SplineContainer.Splines[0];
 
-		native = new NativeSpline(currentSpline);
+
 
 		SplineContainer.GetComponent<Collider>().enabled = false;
 
 		movementController.IsLocked = true;
+
+		GetSplineData();
+
+		// print(Vector3.Dot(SplineRotation * Vector3.forward, movementController.Orientation.forward));
+		// print(SplineRotation * Vector3.forward + " " + movementController.Orientation.forward);
+
+		rbVel = rb.velocity;
+		rbVel.y = 0;
+
+		if (Vector3.Dot(SplineRotation * Vector3.right, movementController.Orientation.forward) <= 0)
+		{
+			IsFacingRight = true;
+		}
+		else
+		{
+			IsFacingRight = false;
+		}
+
+		if (Vector3.Dot(SplineRotation * Vector3.forward, rbVel) >= 0)
+		{
+			IsGoingForward = true;
+		}
+		else
+		{
+			IsGoingForward = false;
+		}
+
+		if (rbVel.magnitude <= MinGrindSpeed)
+		{
+			_useMinGrindSpeed = true;
+		}
+		else
+		{
+			_useMinGrindSpeed = false;
+		}
+
 
 
 		rb.useGravity = false;
@@ -71,13 +122,46 @@ public class GrindSystem : MonoBehaviour
 		StartCoroutine(StopGrindingIEnumerator());
 	}
 
-	private void FixedUpdate()
+	void Update()
 	{
-		if (!IsGrinding || SplineContainer == null)
+		if (!IsGrinding)
 		{
 			return;
 		}
 
+
+		GetSplineData();
+
+
+
+
+
+		Vector3 facing = Vector3.zero;
+
+		if (IsFacingRight)
+		{
+			facing = Vector3.right;
+		}
+		else
+		{
+			facing = Vector3.left;
+		}
+
+		Quaternion Rot = SplineContainerTransform.rotation * Quaternion.Inverse(Quaternion.LookRotation(facing, Vector3.up));
+		movementController.Orientation.rotation = Quaternion.LookRotation(forward, up) * Rot;
+
+
+
+
+
+		if (Vector3.Distance(transform.position, (SplineContainerTransform.rotation * (Vector3)currentSpline.Knots.First().Position) + SplineContainerTransform.position) < Threshold)
+		{
+			StopGrinding();
+		}
+		else if (Vector3.Distance(transform.position, (SplineContainerTransform.rotation * (Vector3)currentSpline.Knots.Last().Position) + SplineContainerTransform.position) < Threshold)
+		{
+			StopGrinding();
+		}
 
 		if (Input.GetKeyDown(KeyCode.Space))
 		{
@@ -98,26 +182,52 @@ public class GrindSystem : MonoBehaviour
 
 			rb.AddForce(Force, ForceMode.Impulse);
 		}
+	}
+
+	private void FixedUpdate()
+	{
+		if (!IsGrinding)
+		{
+			return;
+		}
 
 
+		transform.position = SplinePosition;
+
+		if (IsGoingForward && IsFacingRight)
+		{
+			// print("forward right");
+			if (_useMinGrindSpeed) rb.AddForce((movementController.Orientation.right * MinGrindSpeed) - rb.velocity);
+			else rb.AddForce((movementController.Orientation.right * rbVel.magnitude) - rb.velocity);
+
+		}
+		else if (IsGoingForward && !IsFacingRight)
+		{
+			// print("forward left");
+			if (_useMinGrindSpeed) rb.AddForce((-movementController.Orientation.right * MinGrindSpeed) - rb.velocity);
+			else rb.AddForce((-movementController.Orientation.right * rbVel.magnitude) - rb.velocity);
+		}
+		else if (!IsGoingForward && IsFacingRight)
+		{
+			// print("backwards left");
+			if (_useMinGrindSpeed) rb.AddForce((-movementController.Orientation.right * MinGrindSpeed) - rb.velocity);
+			else rb.AddForce((-movementController.Orientation.right * rbVel.magnitude) - rb.velocity);
+
+		}
+		else if (!IsGoingForward && !IsFacingRight)
+		{
+			// print("backwards right");
+			if (_useMinGrindSpeed) rb.AddForce((movementController.Orientation.right * MinGrindSpeed) - rb.velocity);
+			else rb.AddForce((movementController.Orientation.right * rbVel.magnitude) - rb.velocity);
+
+		}
 
 
 
 		//movementController.isGrounded = true;
 
 
-		SplineUtility.GetNearestPoint(native, Quaternion.Inverse(SplineContainerTransform.rotation) * (transform.position - SplineContainerTransform.position), out float3 nearest, out float t);
 
-		transform.position = (SplineContainerTransform.rotation * (Vector3)nearest) + SplineContainerTransform.position;
-
-		Vector3 forward = Vector3.Normalize(native.EvaluateTangent(t));
-		Vector3 up = native.EvaluateUpVector(t);
-
-		Vector3 remappedForward = new Vector3(0, 0, 1);
-		Vector3 remappedUp = new Vector3(0, 1, 0);
-		Quaternion axisRemapRotation = SplineContainerTransform.rotation * Quaternion.Inverse(Quaternion.LookRotation(remappedForward, remappedUp));
-
-		movementController.Orientation.rotation = Quaternion.LookRotation(forward, up) * axisRemapRotation;
 
 		// Vector3 newForward = movementController._orientation.forward;
 
@@ -135,26 +245,28 @@ public class GrindSystem : MonoBehaviour
 		// 	rb.velocity = newVel;
 		// }
 
-		if (Input.GetKey(KeyCode.S))
-		{
-			rb.AddForce((Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.back) * 2f, ForceMode.Force);
 
-
-			// newForward *= -1;
-		}
-		else if (Input.GetKey(KeyCode.W))
-		{
-			rb.AddForce((Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.forward) * 2f, ForceMode.Force);
-
-
-
-		}
-
-		Debug.DrawRay(transform.position, (Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.back), Color.red);
-		Debug.DrawRay(transform.position, (Quaternion.LookRotation(forward, up) * axisRemapRotation * Vector3.back), Color.blue);
 
 		// rb.velocity = rb.velocity.magnitude * newForward;
 
+	}
+
+	public void GetSplineData()
+	{
+		NativeSpline native = new NativeSpline(currentSpline);
+
+		SplineUtility.GetNearestPoint(native, Quaternion.Inverse(SplineContainerTransform.rotation) * (transform.position - SplineContainerTransform.position), out float3 nearest, out float t);
+
+		SplinePosition = (SplineContainerTransform.rotation * (Vector3)nearest) + SplineContainerTransform.position;
+
+		forward = Vector3.Normalize(native.EvaluateTangent(t));
+		up = native.EvaluateUpVector(t);
+
+		// Vector3 remappedForward = new Vector3(0, 0, 1);
+		// Vector3 remappedUp = new Vector3(0, 1, 0);
+		AxisRemap = SplineContainerTransform.rotation * Quaternion.Inverse(Quaternion.LookRotation(remappedForward, remappedUp));
+
+		SplineRotation = Quaternion.LookRotation(forward, up) * AxisRemap;
 	}
 
 
