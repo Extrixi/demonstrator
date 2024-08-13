@@ -9,6 +9,8 @@ public class InteractableObject : MonoBehaviour, IInteractable
 
 	public UnityEvent OnInteractEvent;
 
+	public Color OutlineColour = Color.yellow;
+	public float OutlineWidth = 10f;
 
 	private Outline ObjectOutline;
 
@@ -17,6 +19,7 @@ public class InteractableObject : MonoBehaviour, IInteractable
 		ObjectOutline = GetComponent<Outline>();
 
 		ObjectOutline.OutlineWidth = 0f;
+		ObjectOutline.OutlineColor = OutlineColour;
 
 		transform.tag = "Interactable";
 	}
@@ -37,4 +40,15 @@ public class InteractableObject : MonoBehaviour, IInteractable
 		OnInteractEvent.Invoke();
 	}
 
+	public void OnSelect()
+	{
+		ObjectOutline.OutlineWidth = OutlineWidth;
+		ObjectOutline.OutlineColor = OutlineColour;
+	}
+
+	public void OnDeSelect()
+	{
+		ObjectOutline.OutlineWidth = 0f;
+
+	}
 }

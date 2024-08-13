@@ -98,12 +98,12 @@ public class InteractionManager : MonoBehaviour
 
 		InteractableItem = itemToSelect;
 
-		InteractableItem.GetComponent<Outline>().OutlineWidth = 10f;
+		InteractableItem.GetComponent<IInteractable>().OnSelect();
 	}
 
 	public void DeSelectItem()
 	{
-		if (InteractableItem != null) InteractableItem.GetComponent<Outline>().OutlineWidth = 0f;
+		if (InteractableItem != null) InteractableItem.GetComponent<IInteractable>().OnDeSelect();
 		InteractableItem = null;
 	}
 }
