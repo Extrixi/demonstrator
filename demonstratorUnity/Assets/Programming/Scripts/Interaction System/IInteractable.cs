@@ -7,6 +7,8 @@ public interface IInteractable
 
 	public void OnInteract();
 
+	public string InteractionHint { get; set; }
+
 	public void OnSelect();
 
 	public void OnDeSelect();

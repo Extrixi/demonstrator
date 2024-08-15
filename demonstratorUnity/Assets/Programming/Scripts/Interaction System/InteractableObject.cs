@@ -14,6 +14,15 @@ public class InteractableObject : MonoBehaviour, IInteractable
 
 	private Outline ObjectOutline;
 
+	public string HintText;
+
+	public string InteractionHint
+	{
+		get => HintText;
+
+		set => HintText = value;
+	}
+
 	void Awake()
 	{
 		ObjectOutline = GetComponent<Outline>();
