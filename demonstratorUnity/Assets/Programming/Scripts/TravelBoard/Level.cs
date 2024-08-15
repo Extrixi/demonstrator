@@ -24,6 +24,11 @@ public class Level : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 	public Sprite HoverLevelIcon;
 	public Sprite SelectedLevelIcon;
 
+	void Awake()
+	{
+		_levelImageComp = GetComponent<Image>();
+	}
+
 	// Start is called before the first frame update
 	void Start()
 	{
