@@ -57,8 +57,8 @@ public class DebugConsole : MonoBehaviour
 	void Start()
 	{
 		ConsoleWindow.SetActive(consoleOpen);
-		Cursor.lockState = consoleOpen ? CursorLockMode.None : CursorLockMode.Locked;
-		Cursor.visible = consoleOpen ? true : false;
+		//Cursor.lockState = consoleOpen ? CursorLockMode.None : CursorLockMode.Locked;
+		//Cursor.visible = consoleOpen ? true : false;
 	}
 
 	// Update is called once per frame

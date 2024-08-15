@@ -519,7 +519,7 @@ MonoBehaviour:
   _maxTurnSpeed: 1.5
   _minTurnSpeed: 3
   _airTurnSpeed: 2
-  JumpForce: 3
+  JumpForce: 10
   _groundRaycastHeight: 1.1
   isGrounded: 0
 --- !u!114 &5545050363549643344
@@ -564,9 +564,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SplineContainer: {fileID: 0}
   SplineContainerTransform: {fileID: 0}
-  Threshold: 0.2
+  Threshold: 0.02
   IsGrinding: 0
   MinGrindSpeed: 10
+  YOffset: 1
 --- !u!114 &5150975995863251662
 MonoBehaviour:
   m_ObjectHideFlags: 0

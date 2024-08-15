@@ -28,6 +28,6 @@ public class SaveData
 	public Dictionary<string, bool> CountryData = new Dictionary<string, bool>()
 	{
 		{ "Test", false},
-		{ "Test", false}
+		{ "Face", false}
 	};
 }

@@ -20,9 +20,9 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 
 	public TMP_Text ToolTip;
 
-	private string _HubName;
+	private string _hubName;
 
-	private Image HubImageComp;
+	private Image _hubImageComp;
 
 	public Sprite DefaultHubIcon;
 	public Sprite HoverHubIcon;
@@ -31,7 +31,7 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 
 	void Awake()
 	{
-		HubImageComp = GetComponent<Image>();
+		_hubImageComp = GetComponent<Image>();
 	}
 
 	// Start is called before the first frame update
@@ -43,8 +43,8 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 			return;
 		}
 
-		_HubName = LevelData.GetLevelByKey(key).Value.Last;
-		ToolTip.text = _HubName;
+		_hubName = LevelData.GetLevelByKey(key).Value.Last;
+		ToolTip.text = _hubName;
 		ToolTip.gameObject.SetActive(false);
 
 		LevelData.LevelInfo? levelData = LevelData.GetlevelByName(SceneManager.GetActiveScene().name);
@@ -98,13 +98,13 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 		{
 			ShowOrHideLevels(IsOnHub);
 
-			HubImageComp.sprite = SelectedHubIcon;
+			_hubImageComp.sprite = SelectedHubIcon;
 		}
 		else if (IsInSubLevel)
 		{
 			ShowOrHideLevels(IsInSubLevel);
 
-			HubImageComp.sprite = InLevelHubIcon;
+			_hubImageComp.sprite = InLevelHubIcon;
 
 			// Show Level We are on.
 		}
@@ -154,13 +154,13 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 	{
 		if (!IsOnHub && !IsInSubLevel)
 		{
-			HubImageComp.sprite = HoverHubIcon;
+			_hubImageComp.sprite = HoverHubIcon;
 
 
+			ToolTip.gameObject.SetActive(true);
+			ToolTip.text = _hubName;
 		}
 
-		ToolTip.gameObject.SetActive(true);
-		ToolTip.text = _HubName;
 
 	}
 
@@ -168,15 +168,15 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 	{
 		if (IsOnHub)
 		{
-			HubImageComp.sprite = SelectedHubIcon;
+			_hubImageComp.sprite = SelectedHubIcon;
 		}
 		else if (IsInSubLevel)
 		{
-			HubImageComp.sprite = InLevelHubIcon;
+			_hubImageComp.sprite = InLevelHubIcon;
 		}
 		else
 		{
-			HubImageComp.sprite = DefaultHubIcon;
+			_hubImageComp.sprite = DefaultHubIcon;
 		}
 
 		ToolTip.gameObject.SetActive(false);
