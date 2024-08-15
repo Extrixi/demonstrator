@@ -18,6 +18,8 @@ public class GrindSystem : MonoBehaviour
 	[Tooltip("The force to apply if the player is not reaching the speed.")]
 	public float MinGrindSpeed = 10f;
 
+	public float YOffset = 1f;
+
 	private Spline currentSpline;
 
 	private Rigidbody rb;
@@ -154,11 +156,11 @@ public class GrindSystem : MonoBehaviour
 
 
 
-		if (Vector3.Distance(transform.position, (SplineContainerTransform.rotation * (Vector3)currentSpline.Knots.First().Position) + SplineContainerTransform.position) < Threshold)
+		if (Vector3.Distance(transform.position, (SplineContainerTransform.rotation * (Vector3)currentSpline.Knots.First().Position) + SplineContainerTransform.position) < Threshold && !currentSpline.Closed)
 		{
 			StopGrinding();
 		}
-		else if (Vector3.Distance(transform.position, (SplineContainerTransform.rotation * (Vector3)currentSpline.Knots.Last().Position) + SplineContainerTransform.position) < Threshold)
+		else if (Vector3.Distance(transform.position, (SplineContainerTransform.rotation * (Vector3)currentSpline.Knots.Last().Position) + SplineContainerTransform.position) < Threshold && !currentSpline.Closed)
 		{
 			StopGrinding();
 		}
@@ -192,7 +194,7 @@ public class GrindSystem : MonoBehaviour
 		}
 
 
-		transform.position = SplinePosition;
+		transform.position = SplinePosition + new Vector3(0, YOffset, 0);
 
 		if (IsGoingForward && IsFacingRight)
 		{
