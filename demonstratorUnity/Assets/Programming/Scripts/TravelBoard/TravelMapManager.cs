@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TravelMapManager : MonoBehaviour
@@ -44,12 +45,20 @@ public class TravelMapManager : MonoBehaviour
 	void Start()
 	{
 		UpdateCountries();
+
+		CloseUI();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-
+		if (TravelBoardUI.activeSelf)
+		{
+			if (Input.GetKeyDown(KeyCode.Escape))
+			{
+				CloseUI();
+			}
+		}
 	}
 
 	public void LoadLevel()

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -16,6 +17,10 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 	public bool IsOnHub = false;
 
 	public bool IsInSubLevel = false;
+
+	public TMP_Text ToolTip;
+
+	private string _HubName;
 
 	private Image HubImageComp;
 
@@ -37,6 +42,10 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 			Debug.LogError($"Critical Error - You are trying to load a >>hub<< that does not exsist - id {key.ToString()}", this.gameObject);
 			return;
 		}
+
+		_HubName = LevelData.GetLevelByKey(key).Value.Last;
+		ToolTip.text = _HubName;
+		ToolTip.gameObject.SetActive(false);
 
 		LevelData.LevelInfo? levelData = LevelData.GetlevelByName(SceneManager.GetActiveScene().name);
 
@@ -146,8 +155,12 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 		if (!IsOnHub && !IsInSubLevel)
 		{
 			HubImageComp.sprite = HoverHubIcon;
+
+
 		}
 
+		ToolTip.gameObject.SetActive(true);
+		ToolTip.text = _HubName;
 
 	}
 
@@ -165,6 +178,9 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 		{
 			HubImageComp.sprite = DefaultHubIcon;
 		}
+
+		ToolTip.gameObject.SetActive(false);
+
 	}
 
 	public void OnPointerClick(PointerEventData eventData)

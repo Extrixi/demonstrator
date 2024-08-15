@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -13,7 +14,11 @@ public class Level : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 
 	public bool IsOnLevel = false;
 
-	private Image LevelImageComp;
+	public TMP_Text ToolTip;
+
+	private string _levelName;
+
+	private Image _levelImageComp;
 
 	public Sprite DefaultLevelIcon;
 	public Sprite HoverLevelIcon;
@@ -26,6 +31,10 @@ public class Level : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 		{
 			Debug.LogError($"Critical Error - You are trying to load a >>level<< that does not exsist - id {key.ToString()}", this.gameObject);
 		}
+
+		_levelName = LevelData.GetLevelByKey(key).Value.Last;
+		ToolTip.text = _levelName;
+		ToolTip.gameObject.SetActive(false);
 
 		LevelData.LevelInfo? levelData = LevelData.GetlevelByName(SceneManager.GetActiveScene().name);
 
@@ -65,7 +74,7 @@ public class Level : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 		if (IsOnLevel)
 		{
 
-			LevelImageComp.sprite = SelectedLevelIcon;
+			_levelImageComp.sprite = SelectedLevelIcon;
 		}
 	}
 
@@ -73,8 +82,14 @@ public class Level : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 	{
 		if (!IsOnLevel)
 		{
-			LevelImageComp.sprite = HoverLevelIcon;
+			_levelImageComp.sprite = HoverLevelIcon;
+
+
+
 		}
+
+		ToolTip.gameObject.SetActive(true);
+		ToolTip.text = _levelName;
 
 
 	}
@@ -83,12 +98,14 @@ public class Level : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, I
 	{
 		if (IsOnLevel)
 		{
-			LevelImageComp.sprite = SelectedLevelIcon;
+			_levelImageComp.sprite = SelectedLevelIcon;
 		}
 		else
 		{
-			LevelImageComp.sprite = DefaultLevelIcon;
+			_levelImageComp.sprite = DefaultLevelIcon;
 		}
+
+		ToolTip.gameObject.SetActive(false);
 	}
 
 	public void OnPointerClick(PointerEventData eventData)
