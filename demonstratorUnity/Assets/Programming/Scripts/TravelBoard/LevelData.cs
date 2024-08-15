@@ -133,7 +133,7 @@ public static class LevelData
 	{
 		{
 			new IDKey(0),
-			new LevelInfo (LevelType.Hub, 0, -1, "Hub_0.0_Westmonton", "Hub", "Westmonton")
+			new LevelInfo (LevelType.Hub, 0, -1, "Hub_0_Westmonton", "Hub", "Westmonton")
 		},
 		{
 			new IDKey(0,0),
@@ -150,6 +150,10 @@ public static class LevelData
 		{
 			new IDKey(0, 3),
 			new LevelInfo(LevelType.Level, 0, 3, "Level_0.3_Tracks", "Level", "Tracks")
+		},
+		{
+			new IDKey(1),
+			new LevelInfo(LevelType.Level, 1, -1, "Hub_1_Dunfall", "Hub", "Dunfall")
 		}
 	};
 
@@ -167,6 +171,14 @@ public static class LevelData
 
 	public static LevelInfo? GetLevelByKey(IDKey key)
 	{
+		if (AllLevels.ContainsKey(key)) return AllLevels[key];
+		else return null;
+	}
+
+	public static LevelInfo? GetLevelByKey(int firstID, int lastID = -1)
+	{
+		IDKey key = new IDKey(firstID, lastID);
+
 		if (AllLevels.ContainsKey(key)) return AllLevels[key];
 		else return null;
 	}
