@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -23,4 +24,10 @@ public class SaveData
 	}
 
 	public LevelData.IDKey CurrentLevelKey = new LevelData.IDKey(0);
+
+	public Dictionary<string, bool> CountryData = new Dictionary<string, bool>()
+	{
+		{ "Test", false},
+		{ "Test", false}
+	};
 }

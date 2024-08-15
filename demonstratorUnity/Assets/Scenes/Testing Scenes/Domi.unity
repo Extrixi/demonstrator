@@ -3456,15 +3456,15 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2857761158948463714, guid: 805e7f585deebb147a94c6fdff2b4ee0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4929300128892456052, guid: 805e7f585deebb147a94c6fdff2b4ee0,
         type: 3}
       propertyPath: m_Name
       value: Travel Board UI
-      objectReference: {fileID: 0}
-    - target: {fileID: 5334762885672042168, guid: 805e7f585deebb147a94c6fdff2b4ee0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5700314698632276064, guid: 805e7f585deebb147a94c6fdff2b4ee0,
         type: 3}
