@@ -54,6 +54,8 @@ public class MovementController : MonoBehaviour
 
 	private RaycastHit _hit;
 
+	private bool _onSlope = false;
+
 	private GrindSystem _grindSystem;
 
 	// Start is called before the first frame update
@@ -80,7 +82,7 @@ public class MovementController : MonoBehaviour
 		// The first is the player rotation of the model, we can raycast straight down from the player's perspective.
 		// We dont want to roate the player in the air so we can have air controls.
 		// But if the player was in the air and touches the ground, we need to raycast into the ground, because the player could be upside down.
-		if (isGrounded)
+		if (!_onSlope)
 		{
 			// we also store a hit. this is used to rotated the player and for slope calcs.
 			isGrounded = Physics.Raycast(_playerModel.position, -_playerModel.transform.up, out _hit, _groundRaycastHeight);
@@ -90,9 +92,44 @@ public class MovementController : MonoBehaviour
 			isGrounded = Physics.Raycast(_rb.position, Vector3.down, out _hit, _groundRaycastHeight);
 		}
 
+		if (isGrounded)
+		{
+			_onSlope = Vector3.Dot(_hit.normal, Vector3.up) < 1;
+		}
 
-		Debug.DrawRay(_playerModel.position, -_playerModel.transform.up * _groundRaycastHeight, Color.red);
-		Debug.DrawRay(_rb.position, Vector3.down * _groundRaycastHeight, Color.blue);
+
+		// Debug.DrawRay(_playerModel.position, -_playerModel.transform.up * _groundRaycastHeight, Color.red);
+		// Debug.DrawRay(_rb.position, Vector3.down * _groundRaycastHeight, Color.blue);
+
+		// if we are grounded we can rotate the player's model to the angle of the floor.
+		// if not, the player can rotate the player character in the air.
+
+		if (isGrounded && !_onSlope)
+		{
+
+			_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
+
+			Orientation.localRotation = Quaternion.Euler(0, Orientation.localRotation.eulerAngles.y, 0);
+
+		}
+		else if (isGrounded && _onSlope)
+		{
+			// Orientation.localRotation = Quaternion.FromToRotation(Orientation., _hit.normal);
+			Vector3 forward = Vector3.ProjectOnPlane(Orientation.forward, _hit.normal);
+			Vector3 up = Vector3.ProjectOnPlane(Orientation.up, _hit.normal);
+
+			_playerModel.localRotation = Quaternion.LookRotation(forward, up);
+
+			print(Quaternion.Euler(Quaternion.LookRotation(_hit.normal, Orientation.forward).eulerAngles.x, 0, Quaternion.LookRotation(_hit.normal, Orientation.right).eulerAngles.z).eulerAngles);
+		}
+		else if (!isGrounded)
+		{
+			Vector3 wishDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+
+			//_playerModel.localRotation = Quaternion.Euler(_playerModel.localRotation.eulerAngles.x, 0, 0);
+			_playerModel.Rotate(Vector3.right * wishDir.z * _airTurnSpeed);
+			Orientation.Rotate(Vector3.up * wishDir.x * _airTurnSpeed);
+		}
 
 		if (isGrounded && Input.GetKeyDown(KeyCode.Space))
 		{
@@ -218,21 +255,7 @@ public class MovementController : MonoBehaviour
 
 
 
-		// if we are grounded we can rotate the player's model to the angle of the floor.
-		// if not, the player can rotate the player character in the air.
-		if (isGrounded)
-		{
-			_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
 
-			Orientation.localRotation = Quaternion.Euler(0, Orientation.localRotation.eulerAngles.y, 0);
-
-		}
-		else
-		{
-			_playerModel.localRotation = Quaternion.Euler(_playerModel.localRotation.eulerAngles.x, 0, 0);
-			_playerModel.Rotate(Vector3.right * wishDir.z * _airTurnSpeed);
-			Orientation.Rotate(Vector3.up * wishDir.x * _airTurnSpeed);
-		}
 
 	}
 }
