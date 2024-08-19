@@ -26,5 +26,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Level_0.3_Tracks.unity
     guid: 0498fa402684bd348a38d0829eff7968
+  - enabled: 1
+    path: Assets/Scenes/Levels/Hub_1_Dunfall.unity
+    guid: f4604a43298905746af31ab330af8ae7
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
