@@ -90,12 +90,14 @@ public class QuestManager : MonoBehaviour
 		QuestData = SaveData.current.Quests;
 	}
 
+	[Obsolete("This will cause crash, no point saving and then saving again, and have it loop.", true)]
 	private void OnSaveDataSave()
 	{
 		// ! WILL CAUSE A LOOP AND FORCE A CRASH! DO NOT RUN THIS!
 		// SaveData.current.Quests = QuestData;
 		// SaveManager.current.ForceSave();
 	}
+
 
 	public void UpdateQuest(int id, QuestInfo questInfo)
 	{
