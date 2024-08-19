@@ -210,7 +210,9 @@ public class MovementController : MonoBehaviour
 
 		if (isGrounded && Vector3.Dot(calcVel, Orientation.forward) < 0.9f)
 		{
-			_rb.velocity = Orientation.forward * _rb.velocity.magnitude;
+			float y = _rb.velocity.y;
+
+			_rb.velocity = Orientation.forward * calcVel.magnitude + new Vector3(0, y, 0);
 
 		}
 
@@ -222,6 +224,7 @@ public class MovementController : MonoBehaviour
 		{
 			_playerModel.localRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
 
+			Orientation.localRotation = Quaternion.Euler(0, Orientation.localRotation.eulerAngles.y, 0);
 
 		}
 		else
