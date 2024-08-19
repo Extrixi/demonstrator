@@ -52,12 +52,12 @@ public class SaveManager : MonoBehaviour
 
         if (SerializationManager.Load(Application.persistentDataPath + "/saves/0.save") == null)
         {
-            SaveData.Current = new SaveData();
-            SerializationManager.Save("0", SaveData.Current);
+            SaveData.current = new SaveData();
+            SerializationManager.Save("0", SaveData.current);
         }
         else
         {
-            SaveData.Current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/0.save");
+            SaveData.current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/0.save");
             GameLoadInvoke();
         }
     }
@@ -68,14 +68,14 @@ public class SaveManager : MonoBehaviour
     /// </summary>
     public void ForceSave()
     {
-        if (SerializationManager.Load(Application.persistentDataPath + "/saves/0.save") == null) { SaveData.Current = new SaveData(); }
-        SerializationManager.Save(saveName, SaveData.Current);
+        if (SerializationManager.Load(Application.persistentDataPath + "/saves/0.save") == null) { SaveData.current = new SaveData(); }
+        SerializationManager.Save(saveName, SaveData.current);
         GameSaveInvoke();
     }
 
     public void ForceLoad()
     {
-        SaveData.Current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/0.save");
+        SaveData.current = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/0.save");
         GameLoadInvoke();
     }
 }
