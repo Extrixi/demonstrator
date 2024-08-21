@@ -114,15 +114,10 @@ public class MovementController : MonoBehaviour
 		}
 		else if (isGrounded && _onSlope)
 		{
-			// Orientation.localRotation = Quaternion.FromToRotation(Orientation., _hit.normal);
-			Vector3 forward = Vector3.ProjectOnPlane(Orientation.forward, _hit.normal);
-			Vector3 up = Vector3.ProjectOnPlane(Orientation.up, _hit.normal);
 
-			_playerModel.localRotation = Quaternion.LookRotation(forward, up);
-
-			print(Quaternion.Euler(Quaternion.LookRotation(_hit.normal, Orientation.forward).eulerAngles.x, 0, Quaternion.LookRotation(_hit.normal, Orientation.right).eulerAngles.z).eulerAngles);
+			_playerModel.rotation = (Quaternion.FromToRotation(Vector3.up, _hit.normal)) * Orientation.rotation;
 		}
-		else if (!isGrounded)
+		else if (!isGrounded && !_onSlope)
 		{
 			Vector3 wishDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
