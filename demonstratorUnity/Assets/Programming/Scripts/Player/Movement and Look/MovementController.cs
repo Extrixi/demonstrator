@@ -58,6 +58,8 @@ public class MovementController : MonoBehaviour
 
 	private GrindSystem _grindSystem;
 
+	// ! ong this is so big. anyway. crouching should be center 0, -.5f, 0 and height 1. then center 0, 0, 0  and height 2 for normal.
+
 	// Start is called before the first frame update
 	void Start()
 	{
