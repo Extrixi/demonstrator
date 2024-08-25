@@ -6,7 +6,7 @@ using UnityEngine;
 public class SaveData
 {
 	private static SaveData _current;
-	public static SaveData Current
+	public static SaveData current
 	{
 		get
 		{
@@ -30,4 +30,7 @@ public class SaveData
 		{ "Test", false},
 		{ "Face", false}
 	};
+
+
+	public Dictionary<int, QuestManager.QuestInfo> Quests = QuestManager.QuestDefualt;
 }
