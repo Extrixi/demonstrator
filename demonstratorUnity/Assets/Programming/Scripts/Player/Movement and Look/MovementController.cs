@@ -123,7 +123,7 @@ public class MovementController : MonoBehaviour
 
 			_playerModel.rotation = (Quaternion.FromToRotation(Vector3.up, _hit.normal)) * Orientation.rotation;
 		}
-		else if (!isGrounded && !_onSlope)
+		else if (!isGrounded && !_onSlope && false) // ! disabled rotating in air.
 		{
 			Vector3 wishDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
