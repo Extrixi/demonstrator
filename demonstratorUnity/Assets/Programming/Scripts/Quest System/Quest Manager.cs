@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour
@@ -30,6 +31,16 @@ public class QuestManager : MonoBehaviour
 			Hub = hub;
 			CurrentState = currentState;
 			Progress = progress;
+		}
+
+		public override string ToString()
+		{
+			return $"[ {{ID = {ID} }}, {{ Name = {Name} }}, {{ Hub = {Hub} }}, {{ CurrentState = {CurrentState} }}, {{ Progress = {(int)Progress} }} ]";
+		}
+
+		public QuestInfo Clone()
+		{
+			return new QuestInfo(ID, Name, Hub, CurrentState, Progress);
 		}
 	}
 
@@ -151,5 +162,14 @@ public class QuestManager : MonoBehaviour
 	{
 		SaveData.current.Quests = QuestData;
 		SaveManager.current.ForceSave();
+	}
+
+	public static void CopyQuests(Dictionary<int, QuestInfo> dataToCopy, ref Dictionary<int, QuestInfo> Target)
+	{
+		var originalDictionary = dataToCopy;
+		Target = originalDictionary.ToDictionary(
+			x => x.Key, // Typically no cloning necessary (immuable)
+			x => (QuestInfo)x.Value.Clone()  // Do the copy how you want
+		);
 	}
 }
