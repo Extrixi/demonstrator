@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1630435601191684050}
   - component: {fileID: 7377268768681515219}
   - component: {fileID: 4947501379867234778}
-  - component: {fileID: 3181428772099030795}
   - component: {fileID: 3710101851537004878}
   m_Layer: 0
   m_Name: 'window 2 (house) '
@@ -85,27 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3181428772099030795
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5222773179126671564}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3710101851537004878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -760,24 +738,8 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 704
+  m_VersionIndex: 707
   m_IsSelectable: 1
-  m_SelectedFaces: 0800000009000000
-  m_SelectedEdges:
-  - a: 33
-    b: 32
-  - a: 32
-    b: 34
-  - a: 34
-    b: 35
-  - a: 35
-    b: 33
-  - a: 37
-    b: 36
-  - a: 36
-    b: 38
-  - a: 38
-    b: 39
-  - a: 39
-    b: 37
-  m_SelectedVertices: 2200000021000000200000002300000026000000250000002400000027000000
+  m_SelectedFaces: 
+  m_SelectedEdges: []
+  m_SelectedVertices: 
