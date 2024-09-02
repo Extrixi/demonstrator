@@ -87,16 +87,20 @@ public class MovementController : MonoBehaviour
 		if (!_onSlope)
 		{
 			// we also store a hit. this is used to rotated the player and for slope calcs.
-			isGrounded = Physics.Raycast(_playerModel.position, -_playerModel.transform.up, out _hit, _groundRaycastHeight);
+			isGrounded = Physics.Raycast(_rb.position, Vector3.down, out _hit, _groundRaycastHeight);
 		}
 		else
 		{
-			isGrounded = Physics.Raycast(_rb.position, Vector3.down, out _hit, _groundRaycastHeight);
+			isGrounded = Physics.Raycast(_playerModel.position, -_playerModel.transform.up, out _hit, _groundRaycastHeight);
 		}
 
 		if (isGrounded)
 		{
 			_onSlope = Vector3.Dot(_hit.normal, Vector3.up) < 1;
+		}
+		else
+		{
+			_onSlope = false;
 		}
 
 
