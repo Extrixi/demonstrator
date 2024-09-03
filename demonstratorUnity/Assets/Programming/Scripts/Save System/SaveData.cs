@@ -34,6 +34,8 @@ public class SaveData
 	//! needs to be managed. cannot do this as it is passing a referance.
 	public Dictionary<int, QuestManager.QuestInfo> Quests;
 
+	public int[] PinnedQuests = new int[3];
+
 
 	public override string ToString()
 	{

@@ -47,8 +47,9 @@ public class QuestManager : MonoBehaviour
 	}
 
 
+	public Dictionary<int, QuestInfo> QuestData { get; private set; }
 
-	private Dictionary<int, QuestInfo> QuestData = new Dictionary<int, QuestInfo>();
+	public int[] PinnedQuests = new int[3];
 
 	void Awake()
 	{
@@ -68,7 +69,7 @@ public class QuestManager : MonoBehaviour
 		if (SaveManager.current != null)
 		{
 			QuestData = SaveData.current.Quests;
-
+			PinnedQuests = SaveData.current.PinnedQuests;
 			SaveManager.current.onLoad += OnSaveDataLoad;
 			// SaveManager.current.onSave += OnSaveDataSave;
 		}
@@ -76,6 +77,7 @@ public class QuestManager : MonoBehaviour
 		{
 			Debug.LogError("CATASTROPHIC ERROR - Quest sysyem cannot access save data!", this.gameObject);
 			QuestData = QuestDataSheet.QuestDefualt;
+			PinnedQuests = new int[] { -1, -1, -1 };
 
 
 		}
@@ -113,6 +115,15 @@ public class QuestManager : MonoBehaviour
 		if (!QuestData.ContainsKey(id)) throw new NullReferenceException("Cannot find quest with that ID!");
 
 		QuestData[id] = questInfo;
+
+		OnUpdateQuests();
+	}
+
+	public void UpdateQuest(QuestInfo questInfo)
+	{
+		if (!QuestData.ContainsKey(questInfo.ID)) throw new NullReferenceException("Cannot find quest with that ID!");
+
+		QuestData[questInfo.ID] = questInfo;
 
 		OnUpdateQuests();
 	}
@@ -206,7 +217,6 @@ public class QuestManager : MonoBehaviour
 			questInfo.State = QuestState.Completed;
 		}
 
-		// no func to take one peram
-		UpdateQuest(questID, questInfo);
+		UpdateQuest(questInfo);
 	}
 }
