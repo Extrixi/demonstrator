@@ -56,7 +56,7 @@ public class SaveData
 
 
 
-		QuestManager.CopyQuests(QuestManager.QuestDefualt, ref Quests);
+		QuestManager.CopyQuests(QuestDataSheet.QuestDefualt, ref Quests);
 
 		textToDisplay += $"\nDictionary<int, QuestManager.QuestInfo> Quests\n{{";
 

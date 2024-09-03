@@ -8,12 +8,12 @@ public class QuestManager : MonoBehaviour
 {
 	public static QuestManager current;
 
-	public enum QuestProgress
+	public enum QuestState
 	{
 		Hidden = 0,
 		Avalible = 1,
 		Accepted = 2,
-		Compleated = 3,
+		Completed = 3,
 	}
 
 	public struct QuestInfo
@@ -21,34 +21,32 @@ public class QuestManager : MonoBehaviour
 		public int ID;
 		public string Name;
 		public int Hub;
-		public int CurrentState;
-		public QuestProgress Progress;
+		public string[] Tasks;
+		public int CurrentProgress;
+		public QuestState State;
 
-		public QuestInfo(int id, string name, int hub, int currentState = 0, QuestProgress progress = QuestProgress.Avalible)
+		public QuestInfo(int id, string name, int hub, string[] messages, int currentState = 0, QuestState progress = QuestState.Avalible)
 		{
 			ID = id;
 			Name = name;
 			Hub = hub;
-			CurrentState = currentState;
-			Progress = progress;
+			Tasks = messages;
+			CurrentProgress = currentState;
+			State = progress;
 		}
 
 		public override string ToString()
 		{
-			return $"[ {{ID = {ID} }}, {{ Name = {Name} }}, {{ Hub = {Hub} }}, {{ CurrentState = {CurrentState} }}, {{ Progress = {(int)Progress} }} ]";
+			return $"[ {{ID = {ID} }}, {{ Name = {Name} }}, {{ Hub = {Hub} }}, {{ Messages = {Tasks.ToString()}}}, {{ CurrentState = {CurrentProgress} }}, {{ Progress = {(int)State} }} ]";
 		}
 
 		public QuestInfo Clone()
 		{
-			return new QuestInfo(ID, Name, Hub, CurrentState, Progress);
+			return new QuestInfo(ID, Name, Hub, Tasks, CurrentProgress, State);
 		}
 	}
 
-	public static Dictionary<int, QuestInfo> QuestDefualt = new Dictionary<int, QuestInfo>()
-	{
-		{1, new QuestInfo(1, "Test1", 0)},
-		{2, new QuestInfo(2, "Test2", 0)},
-	};
+
 
 	private Dictionary<int, QuestInfo> QuestData = new Dictionary<int, QuestInfo>();
 
@@ -77,7 +75,7 @@ public class QuestManager : MonoBehaviour
 		else
 		{
 			Debug.LogError("CATASTROPHIC ERROR - Quest sysyem cannot access save data!", this.gameObject);
-			QuestData = QuestDefualt;
+			QuestData = QuestDataSheet.QuestDefualt;
 
 
 		}
@@ -101,13 +99,13 @@ public class QuestManager : MonoBehaviour
 		QuestData = SaveData.current.Quests;
 	}
 
-	[Obsolete("This will cause crash, no point saving and then saving again, and have it loop.", true)]
-	private void OnSaveDataSave()
+
+	private void SaveQuets()
 	{
-		// ! WILL CAUSE A LOOP AND FORCE A CRASH! DO NOT RUN THIS!
-		// SaveData.current.Quests = QuestData;
-		// SaveManager.current.ForceSave();
+		SaveData.current.Quests = QuestData;
+		SaveManager.current.ForceSave();
 	}
+
 
 
 	public void UpdateQuest(int id, QuestInfo questInfo)
@@ -119,13 +117,13 @@ public class QuestManager : MonoBehaviour
 		OnUpdateQuests();
 	}
 
-	public void UpdateQuest(int id, QuestProgress progress)
+	public void UpdateQuest(int id, QuestState progress)
 	{
 		if (!QuestData.ContainsKey(id)) throw new NullReferenceException("Cannot find quest with that ID!");
 
 		QuestInfo questInfo = QuestData[id];
 
-		questInfo.Progress = progress;
+		questInfo.State = progress;
 
 		QuestData[id] = questInfo;
 
@@ -138,7 +136,7 @@ public class QuestManager : MonoBehaviour
 
 		QuestInfo questInfo = QuestData[id];
 
-		questInfo.CurrentState = currentState;
+		questInfo.CurrentProgress = currentState;
 
 		QuestData[id] = questInfo;
 
@@ -151,8 +149,8 @@ public class QuestManager : MonoBehaviour
 
 		QuestInfo questInfo = QuestData[id];
 
-		questInfo.Progress = QuestProgress.Accepted;
-		questInfo.CurrentState = 1;
+		questInfo.State = QuestState.Accepted;
+		// questInfo.CurrentProgress = 1;
 
 		QuestData[id] = questInfo;
 
@@ -164,6 +162,16 @@ public class QuestManager : MonoBehaviour
 		SaveManager.current.ForceSave();
 	}
 
+#nullable enable
+	public QuestInfo? GetQuestInfo(int id)
+	{
+		if (QuestData.ContainsKey(id))
+			return QuestData[id];
+		else
+			return null;
+	}
+#nullable disable
+
 	public static void CopyQuests(Dictionary<int, QuestInfo> dataToCopy, ref Dictionary<int, QuestInfo> Target)
 	{
 		var originalDictionary = dataToCopy;
@@ -171,5 +179,34 @@ public class QuestManager : MonoBehaviour
 			x => x.Key, // Typically no cloning necessary (immuable)
 			x => (QuestInfo)x.Value.Clone()  // Do the copy how you want
 		);
+	}
+
+#nullable enable
+	public static string? GetTask(QuestInfo quest)
+	{
+		if (quest.CurrentProgress >= quest.Tasks.Length)
+		{
+			return null;
+		}
+
+		return quest.Tasks[quest.CurrentProgress];
+	}
+#nullable disable
+
+	public void CompleateQuestTask(int questID)
+	{
+		if (!QuestData.ContainsKey(questID)) throw new NullReferenceException("Cannot find quest with that ID!");
+
+		QuestInfo questInfo = QuestData[questID];
+
+		questInfo.CurrentProgress++;
+
+		if (questInfo.CurrentProgress >= questInfo.Tasks.Length)
+		{
+			questInfo.State = QuestState.Completed;
+		}
+
+		// no func to take one peram
+		UpdateQuest(questID, questInfo);
 	}
 }
