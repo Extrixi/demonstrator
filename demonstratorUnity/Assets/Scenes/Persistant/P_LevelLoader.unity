@@ -732,6 +732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2b138e5fde6c51488b152c68938c35d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PinnedQuests: ffffffffffffffffffffffff
 --- !u!114 &1651306248
 MonoBehaviour:
   m_ObjectHideFlags: 0

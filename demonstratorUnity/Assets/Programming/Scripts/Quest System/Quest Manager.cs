@@ -47,9 +47,9 @@ public class QuestManager : MonoBehaviour
 	}
 
 
-	public Dictionary<int, QuestInfo> QuestData { get; private set; }
+	public Dictionary<int, QuestInfo> QuestData;
 
-	public int[] PinnedQuests = new int[3];
+	public int[] PinnedQuests = new int[] { -1, -1, -1 };
 
 	void Awake()
 	{
@@ -70,8 +70,24 @@ public class QuestManager : MonoBehaviour
 		{
 			QuestData = SaveData.current.Quests;
 			PinnedQuests = SaveData.current.PinnedQuests;
+
+			if (PinnedQuests == null)
+			{
+				PinnedQuests = new int[] { -1, -1, -1 };
+				SaveData.current.PinnedQuests = PinnedQuests;
+				SaveManager.current.ForceSave();
+			}
+			else if (PinnedQuests.Length != 3)
+			{
+				PinnedQuests = new int[] { -1, -1, -1 };
+				SaveData.current.PinnedQuests = PinnedQuests;
+				SaveManager.current.ForceSave();
+			}
+
 			SaveManager.current.onLoad += OnSaveDataLoad;
 			// SaveManager.current.onSave += OnSaveDataSave;
+
+			CopyQuests(QuestDataSheet.QuestDefualt, ref QuestData);
 		}
 		else
 		{
@@ -218,5 +234,71 @@ public class QuestManager : MonoBehaviour
 		}
 
 		UpdateQuest(questInfo);
+	}
+
+	public bool PinQuest(int questUID)
+	{
+		if (PinnedQuests.Contains(-1))
+		{
+			if (PinnedQuests[0] == -1)
+			{
+				PinnedQuests[0] = questUID;
+
+				return true;
+			}
+			else if (PinnedQuests[1] == -1)
+			{
+				PinnedQuests[1] = questUID;
+
+				return true;
+			}
+			else if (PinnedQuests[2] == -1)
+			{
+				PinnedQuests[2] = questUID;
+
+				return true;
+			}
+		}
+		else
+		{
+			int a = PinnedQuests[0];
+			int b = PinnedQuests[1];
+
+			PinnedQuests[0] = questUID;
+			PinnedQuests[1] = a;
+			PinnedQuests[2] = b;
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public void UnPinQuest(int questUID)
+	{
+		if (PinnedQuests[0] == questUID)
+		{
+			PinnedQuests[0] = -1;
+		}
+		else if (PinnedQuests[1] == questUID)
+		{
+			PinnedQuests[1] = -1;
+		}
+		else if (PinnedQuests[2] == questUID)
+		{
+			PinnedQuests[2] = -1;
+		}
+	}
+
+	public bool CheckQuestIsPinned(int questUID)
+	{
+		if (PinnedQuests.Contains(questUID))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

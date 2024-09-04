@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 7049665967914437358}
   - component: {fileID: 7500255380529529630}
   - component: {fileID: 1962781443568041697}
+  - component: {fileID: 2541320093760368392}
   m_Layer: 0
   m_Name: Image
   m_TagString: Untagged
@@ -213,6 +214,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2541320093760368392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357715367541321620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df4f8375fa162f4c87901a2ccd6b153, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Text: {fileID: 528143215254553840}
+  ButtonText: {fileID: 3478955823191679728}
+  QuestUID: 0
+  IsPinned: 0
 --- !u!1 &778762290383944199
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,4 +484,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2573390479019753579}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2541320093760368392}
+        m_TargetAssemblyTypeName: QuestItem, Assembly-CSharp
+        m_MethodName: TogglePin
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

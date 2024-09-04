@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Persistant/P_LevelLoader.unity
     guid: b58e47ce9e313604b9810fd894a6e4e4
   - enabled: 1
+    path: Assets/Scenes/Testing Scenes/Domi.unity
+    guid: c1e825c588fd21a4e9ac38a00c03e859
+  - enabled: 1
     path: Assets/Scenes/Main Scenes/MainMenu.unity
     guid: 85d3736c3ce0b8241b59abfd886ea00d
   - enabled: 1
