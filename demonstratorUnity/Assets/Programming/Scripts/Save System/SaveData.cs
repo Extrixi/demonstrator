@@ -32,16 +32,18 @@ public class SaveData
 	};
 
 	//! needs to be managed. cannot do this as it is passing a referance.
-	public Dictionary<int, QuestManager.QuestInfo> Quests;
+	public Dictionary<int, QuestManager.QuestInfo> Quests = QuestDataSheet.QuestDefualt;
 
 	public int[] PinnedQuests = new int[3];
+
+
 
 
 	public override string ToString()
 	{
 		string textToDisplay = "";
 
-		textToDisplay += CurrentLevelKey.ToString();
+		textToDisplay += "Current Level " + CurrentLevelKey.ToString();
 
 		textToDisplay += $"\n";
 
@@ -58,13 +60,24 @@ public class SaveData
 
 
 
-		QuestManager.CopyQuests(QuestDataSheet.QuestDefualt, ref Quests);
+		//QuestManager.CopyQuests(QuestDataSheet.QuestDefualt, ref Quests);
 
 		textToDisplay += $"\nDictionary<int, QuestManager.QuestInfo> Quests\n{{";
 
 		foreach (int quest in Quests.Keys)
 		{
 			textToDisplay += $"\n	{{{quest}, {Quests[quest].ToString()}}}";
+		}
+
+		textToDisplay += $"\n}}\n";
+
+
+
+		textToDisplay += $"\nArray<int> Pinned Quests\n{{\n";
+
+		foreach (int pin in PinnedQuests)
+		{
+			textToDisplay += $" {pin},";
 		}
 
 		textToDisplay += $"\n}}\n";

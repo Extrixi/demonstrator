@@ -26,6 +26,9 @@ public class QuestTask : MonoBehaviour
 	public UnityEvent OnQuestTaskCompleate;
 	private bool _ranTaskCompleateEvent = false;
 
+	public UnityEvent OnQuestTaskAlreadyCompleate;
+	private bool _ranTaskAlreadyCompleateEvent = false;
+
 
 	// Start is called before the first frame update
 	void Start()
@@ -34,7 +37,7 @@ public class QuestTask : MonoBehaviour
 		{
 			_hasInfo = QuestManager.current.GetQuestInfo(QuestUID).HasValue;
 
-
+			UpdateInfo();
 
 		}
 	}
@@ -42,16 +45,26 @@ public class QuestTask : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		if (QuestManager.current == null) return;
+
+
 		// stop unessary calls to update so we can have nice fps.
 		if (_nextToDo || (_taskCompleated && !_ranTaskCompleateEvent)) UpdateInfo();
 
 		if (_acceptedQuest && _nextToDo && _hasInfo && !_ranTaskReadyEvent)
 		{
 			OnQuestTaskReadyToDo.Invoke();
+			_ranTaskReadyEvent = true;
 		}
 		else if (_taskCompleated && !_ranTaskCompleateEvent)
 		{
 			OnQuestTaskCompleate.Invoke();
+			_ranTaskCompleateEvent = true;
+		}
+		else if (info.State == QuestState.Completed && !_ranTaskAlreadyCompleateEvent)
+		{
+			OnQuestTaskAlreadyCompleate.Invoke();
+			_ranTaskAlreadyCompleateEvent = true;
 		}
 
 	}
@@ -60,6 +73,8 @@ public class QuestTask : MonoBehaviour
 	{
 		info = QuestManager.current.GetQuestInfo(QuestUID).Value;
 		_hasInfo = true;
+
+		if (!_hasInfo) return;
 
 		_acceptedQuest = info.State == QuestState.Accepted;
 
@@ -70,7 +85,7 @@ public class QuestTask : MonoBehaviour
 
 	public void CompleateTask()
 	{
-		if (!_hasInfo) return;
+		if (!_hasInfo && !_taskCompleated) return;
 
 		QuestManager.current.CompleateQuestTask(QuestUID);
 	}

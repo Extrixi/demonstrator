@@ -14,22 +14,21 @@ public class DisplayQuests : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		if (SaveManager.current != null)
-		{
-			SaveManager.current.onSave += DisplayQuestsFromData;
-		}
-
 		if (QuestManager.current != null)
 		{
+			QuestManager.current.onPinsUpdated += DisplayQuestsFromData;
+			QuestManager.current.onQuestsUpdated += DisplayQuestsFromData;
 			DisplayQuestsFromData();
 		}
+
 	}
 
 	void OnDisable()
 	{
-		if (SaveManager.current != null)
+		if (QuestManager.current != null)
 		{
-			SaveManager.current.onSave -= DisplayQuestsFromData;
+			QuestManager.current.onPinsUpdated -= DisplayQuestsFromData;
+			QuestManager.current.onQuestsUpdated -= DisplayQuestsFromData;
 		}
 	}
 
@@ -49,30 +48,30 @@ public class DisplayQuests : MonoBehaviour
 
 			if (quest.State != QuestState.Accepted) continue;
 
-			if (_pinnedQuests[0] == quest.ID)
+			if (_pinnedQuests[0] == quest.UID)
 			{
 				if (quest.Tasks[quest.CurrentProgress] != null) questCurrentTask = quest.Tasks[quest.CurrentProgress];
 				else questCurrentTask = "Unknown";
 
-				display.Insert(1, $"[P1] Quest {quest.ID} - {questCurrentTask}\n");
+				display.Insert(1, $"[P1] Quest {quest.UID} - {questCurrentTask}\n");
 
 				continue;
 			}
-			else if (_pinnedQuests[1] == quest.ID)
+			else if (_pinnedQuests[1] == quest.UID)
 			{
 				if (quest.Tasks[quest.CurrentProgress] != null) questCurrentTask = quest.Tasks[quest.CurrentProgress];
 				else questCurrentTask = "Unknown";
 
-				display.Insert(2, $"[P2] Quest {quest.ID} - {questCurrentTask}\n");
+				display.Insert(2, $"[P2] Quest {quest.UID} - {questCurrentTask}\n");
 
 				continue;
 			}
-			else if (_pinnedQuests[2] == quest.ID)
+			else if (_pinnedQuests[2] == quest.UID)
 			{
 				if (quest.Tasks[quest.CurrentProgress] != null) questCurrentTask = quest.Tasks[quest.CurrentProgress];
 				else questCurrentTask = "Unknown";
 
-				display.Insert(3, $"[P3] Quest {quest.ID} - {questCurrentTask}\n");
+				display.Insert(3, $"[P3] Quest {quest.UID} - {questCurrentTask}\n");
 
 				continue;
 			}
@@ -80,7 +79,7 @@ public class DisplayQuests : MonoBehaviour
 			if (quest.Tasks[quest.CurrentProgress] != null) questCurrentTask = quest.Tasks[quest.CurrentProgress];
 			else questCurrentTask = "Unknown";
 
-			display.Add($"Quest {quest.ID} - {questCurrentTask}\n");
+			display.Add($"Quest {quest.UID} - {questCurrentTask}\n");
 
 		}
 
