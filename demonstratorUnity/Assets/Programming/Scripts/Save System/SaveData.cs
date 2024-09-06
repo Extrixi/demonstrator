@@ -23,7 +23,7 @@ public class SaveData
 		}
 	}
 
-	public LevelData.IDKey CurrentLevelKey = new LevelData.IDKey(0);
+	public LevelData.IDKey CurrentLevelKey = new LevelData.IDKey(-1);
 
 	public Dictionary<string, bool> CountryData = new Dictionary<string, bool>()
 	{
