@@ -209,6 +209,7 @@ public class QuestManager : MonoBehaviour
 
 		QuestData[id] = questInfo;
 
+		OnUpdateQuests();
 	}
 
 
@@ -341,5 +342,20 @@ public class QuestManager : MonoBehaviour
 		}
 	}
 
+
+	public List<QuestInfo> GetQuestsForHub(int HubID)
+	{
+		List<QuestInfo> infos = new List<QuestInfo>();
+
+		foreach (QuestInfo questInfo in QuestData.Values)
+		{
+			if (questInfo.Hub == HubID && questInfo.State == QuestState.Avalible)
+			{
+				infos.Add(questInfo);
+			}
+		}
+
+		return infos;
+	}
 
 }

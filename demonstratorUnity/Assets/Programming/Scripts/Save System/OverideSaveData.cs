@@ -16,7 +16,7 @@ public class OverideSaveDataButtons : Editor
 
 		OverideSaveData myScript = (OverideSaveData)target;
 
-		if (GUILayout.Button("Force sensitivty")) myScript.SaveNewSens();
+		if (GUILayout.Button("Force Save")) myScript.SaveNewSens();
 	}
 }
 // ! ===============================
@@ -51,6 +51,11 @@ public class OverideSaveData : MonoBehaviour
 	{
 		// SaveData.current.Sensitivity = sensitivity;
 		// SerializationManager.Save("0", SaveData.current);
+		if (SaveManager.current == null)
+		{
+			print("Must be in runtime!");
+			return;
+		}
 		SaveManager.current.ForceSave();
 	}
 }

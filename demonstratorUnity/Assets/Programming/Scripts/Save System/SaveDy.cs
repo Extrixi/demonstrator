@@ -26,6 +26,9 @@ public class UIForSaveDy : Editor
 
 		SaveDy myScript = (SaveDy)target;
 		if (GUILayout.Button("DecriptSave", option)) myScript.DycriptSave();
+
+
+		if (GUILayout.Button("DeleteSave", option)) myScript.DeleteSave();
 	}
 }
 // ! ===============================
@@ -58,6 +61,13 @@ public class SaveDy : MonoBehaviour
 
 		// FileStream file = File.Create(Path.Combine(path, save));
 
+		if (!File.Exists(Application.persistentDataPath + "/saves/0.save"))
+		{
+
+			print("No Save File");
+			return;
+		}
+
 		SaveData saveData = (SaveData)SerializationManager.Load(Application.persistentDataPath + "/saves/0.save");
 
 
@@ -70,5 +80,29 @@ public class SaveDy : MonoBehaviour
 		}
 
 		print("Decrypted Save File");
+	}
+
+	public void DeleteSave()
+	{
+		if (!Directory.Exists(Application.persistentDataPath + "/saves"))
+		{
+			print("Nothing to delete");
+
+			return;
+		}
+
+		if (!File.Exists(Application.persistentDataPath + "/saves/0.save"))
+		{
+
+			print("No Save File");
+			return;
+		}
+
+		string path = Application.persistentDataPath + "/saves/0.save";
+		File.Delete(path);
+
+		print("Deleted Save File");
+
+
 	}
 }
