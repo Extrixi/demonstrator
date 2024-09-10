@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+#if UNITY_EDITOR
 public class DSMultipleChoiceNode : DSNode
 {
 
@@ -67,3 +67,4 @@ public class DSMultipleChoiceNode : DSNode
 		RefreshExpandedState();
 	}
 }
+#endif
