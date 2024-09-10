@@ -190,6 +190,12 @@ public class Hub : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPo
 		{
 			IsOnHub = true;
 
+			if (SaveManager.current != null)
+			{
+				SaveData.current.CurrentLevelKey = key;
+				SaveManager.current.ForceSave();
+			}
+
 			if (LevelLoading.Instance != null)
 			{
 				LevelLoading.Instance.LoadScene(LevelData.GetLevelNameByKey(key));

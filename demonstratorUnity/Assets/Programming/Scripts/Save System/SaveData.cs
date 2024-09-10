@@ -23,7 +23,7 @@ public class SaveData
 		}
 	}
 
-	public LevelData.IDKey CurrentLevelKey = new LevelData.IDKey(0);
+	public LevelData.IDKey CurrentLevelKey = new LevelData.IDKey(-1);
 
 	public Dictionary<string, bool> CountryData = new Dictionary<string, bool>()
 	{
@@ -31,6 +31,59 @@ public class SaveData
 		{ "Face", false}
 	};
 
+	//! needs to be managed. cannot do this as it is passing a referance.
+	public Dictionary<int, QuestManager.QuestInfo> Quests = QuestDataSheet.QuestDefualt;
 
-	public Dictionary<int, QuestManager.QuestInfo> Quests = QuestManager.QuestDefualt;
+	public int[] PinnedQuests = new int[3];
+
+
+
+
+	public override string ToString()
+	{
+		string textToDisplay = "";
+
+		textToDisplay += "Current Level " + CurrentLevelKey.ToString();
+
+		textToDisplay += $"\n";
+
+
+
+		textToDisplay += $"\nDictionary<string, bool> CountryData\n{{";
+
+		foreach (string Country in CountryData.Keys)
+		{
+			textToDisplay += $"\n	{{{Country}, {CountryData[Country].ToString()}}}";
+		}
+
+		textToDisplay += $"\n}}\n";
+
+
+
+		//QuestManager.CopyQuests(QuestDataSheet.QuestDefualt, ref Quests);
+
+		textToDisplay += $"\nDictionary<int, QuestManager.QuestInfo> Quests\n{{";
+
+		foreach (int quest in Quests.Keys)
+		{
+			textToDisplay += $"\n	{{{quest}, {Quests[quest].ToString()}}}";
+		}
+
+		textToDisplay += $"\n}}\n";
+
+
+
+		textToDisplay += $"\nArray<int> Pinned Quests\n{{\n";
+
+		foreach (int pin in PinnedQuests)
+		{
+			textToDisplay += $" {pin},";
+		}
+
+		textToDisplay += $"\n}}\n";
+
+
+
+		return textToDisplay;
+	}
 }

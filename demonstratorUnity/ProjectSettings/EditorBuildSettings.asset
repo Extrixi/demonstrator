@@ -12,11 +12,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Scenes/MainMenu.unity
     guid: 85d3736c3ce0b8241b59abfd886ea00d
   - enabled: 1
+    path: Assets/Scenes/Levels/Level_0.0_Tutorial.unity
+    guid: 6f761bd9de395b149b81ccfbe4d53977
+  - enabled: 1
     path: Assets/Scenes/Levels/Hub_0_Westmonton.unity
     guid: 20bb3fe7215524b46b3c6ec676ade211
   - enabled: 1
-    path: Assets/Scenes/Levels/Level_0.0_Tutorial.unity
-    guid: 6f761bd9de395b149b81ccfbe4d53977
+    path: Assets/Scenes/Testing Scenes/Domi.unity
+    guid: c1e825c588fd21a4e9ac38a00c03e859
   - enabled: 1
     path: Assets/Scenes/Levels/Level_0.1_AbandonedWarehouse.unity
     guid: 80b42fb7e16a47a478b3b33072662009

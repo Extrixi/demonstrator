@@ -132,6 +132,10 @@ public static class LevelData
 	public static Dictionary<IDKey, LevelInfo> AllLevels = new Dictionary<IDKey, LevelInfo>()
 	{
 		{
+			new IDKey(-1),
+			new LevelInfo (LevelType.Hub, -1, -1, "Domi", "Domi", "Domi")
+		},
+		{
 			new IDKey(0),
 			new LevelInfo (LevelType.Hub, 0, -1, "Hub_0_Westmonton", "Hub", "Westmonton")
 		},

@@ -60,12 +60,16 @@ public class MovementController : MonoBehaviour
 
 	// ! ong this is so big. anyway. crouching should be center 0, -.5f, 0 and height 1. then center 0, 0, 0  and height 2 for normal.
 
+	private CapsuleCollider _capsuleCollider;
+
 	// Start is called before the first frame update
 	void Start()
 	{
 		_rb = GetComponent<Rigidbody>();
 
 		_grindSystem = GetComponent<GrindSystem>();
+
+		_capsuleCollider = GetComponent<CapsuleCollider>();
 	}
 
 	void Update()
@@ -123,7 +127,7 @@ public class MovementController : MonoBehaviour
 
 			_playerModel.rotation = (Quaternion.FromToRotation(Vector3.up, _hit.normal)) * Orientation.rotation;
 		}
-		else if (!isGrounded && !_onSlope)
+		else if (!isGrounded && !_onSlope && false) // ! disabled rotating in air.
 		{
 			Vector3 wishDir = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
@@ -154,6 +158,17 @@ public class MovementController : MonoBehaviour
 			_rb.AddForce(Force, ForceMode.Impulse);
 
 			print("jumped");
+		}
+
+		if (Input.GetKey(KeyCode.LeftControl))
+		{
+			_capsuleCollider.center = new Vector3(0f, -0.5f, 0f);
+			_capsuleCollider.height = 1;
+		}
+		else
+		{
+			_capsuleCollider.center = new Vector3(0f, 0f, 0f);
+			_capsuleCollider.height = 2;
 		}
 	}
 
@@ -189,8 +204,11 @@ public class MovementController : MonoBehaviour
 			// we get the required force needed to reach the target speed with current velocity then we reduce it so it accelerates.
 			Vector3 targ = ((Orientation.forward * TargetSpeed) - _rb.velocity) * _accellerationRate;
 
-			// we dont want to effect the y. otherwise we fly or go down to hell.
-			targ.y = 0;
+			if (!_onSlope)
+			{
+				// we dont want to effect the y. otherwise we fly or go down to hell.
+				targ.y = 0;
+			}
 
 			// we add the fore to the player.
 			_rb.AddForce(targ, ForceMode.Force);
@@ -204,8 +222,11 @@ public class MovementController : MonoBehaviour
 			// we get the invert vector of the current velocity, then reduce the vector so it deaccelerates the player.
 			Vector3 targ = -_rb.velocity * _deAccellerationRate;
 
-			// dont effect the Y.
-			targ.y = 0;
+			if (!_onSlope)
+			{
+				// dont effect the Y.
+				targ.y = 0;
+			}
 
 			// if the speed is below the minimum stop speed, then just reset the velocity.
 			// Otherwise, just add the deacceleration speed to the player.
@@ -232,7 +253,7 @@ public class MovementController : MonoBehaviour
 
 
 
-			_rb.velocity = Orientation.forward * _rb.velocity.magnitude;
+			_rb.velocity = _playerModel.forward * _rb.velocity.magnitude;
 
 
 			// DONT EFFECT Y.
@@ -246,7 +267,7 @@ public class MovementController : MonoBehaviour
 		calcVel.y = 0;
 
 
-		if (isGrounded && Vector3.Dot(calcVel, Orientation.forward) < 0.9f)
+		if (isGrounded && !_onSlope && Vector3.Dot(calcVel, Orientation.forward) < 0.9f)
 		{
 			float y = _rb.velocity.y;
 
