@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6754701039245448131
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7114182156550759668, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 6b495d88619f7934eb19944c317b1e7c, type: 2}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 61.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 12.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 49.596558
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8282553086476459931, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8771422775728325921, guid: a62e0411ce88a6e4bb4480ce51d3fa57,
+        type: 3}
+      propertyPath: m_Name
+      value: shopfront (cream) Variant
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a62e0411ce88a6e4bb4480ce51d3fa57, type: 3}
