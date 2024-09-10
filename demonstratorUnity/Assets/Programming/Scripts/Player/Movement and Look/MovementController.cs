@@ -253,7 +253,7 @@ public class MovementController : MonoBehaviour
 
 
 
-			_rb.velocity = Orientation.forward * _rb.velocity.magnitude;
+			_rb.velocity = _playerModel.forward * _rb.velocity.magnitude;
 
 
 			// DONT EFFECT Y.
