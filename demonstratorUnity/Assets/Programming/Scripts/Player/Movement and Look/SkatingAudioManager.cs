@@ -44,6 +44,6 @@ public class SkatingAudioManager : MonoBehaviour
 
 
 		// modified lerp to get desired result.
-		SkateAudioSource.pitch = (0.5f + (2f - 0.5f)) * vel.magnitude / (_movementController.TargetSpeed * 2f);
+		SkateAudioSource.pitch = (0.5f + (2f - 0.5f)) * vel.magnitude / (_movementController.MaxAccelerationSpeed * 2f);
 	}
 }
