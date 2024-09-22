@@ -4,10 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Manages the quests and save data of the quests.
+/// </summary>
 public class QuestManager : MonoBehaviour
 {
+	/// <summary>
+	/// Singleton
+	/// </summary>
 	public static QuestManager current;
 
+	/// <summary>
+	/// The state of the quest. [ 0 - Hidden | 1 - Avalible | 2 - Accepted | 3 - Completed ]
+	/// </summary>
 	[Serializable]
 	public enum QuestState
 	{
@@ -17,6 +26,9 @@ public class QuestManager : MonoBehaviour
 		Completed = 3,
 	}
 
+	/// <summary>
+	/// Data of the quest, this is used to store quest data.
+	/// </summary>
 	[Serializable]
 	public struct QuestInfo
 	{
@@ -48,11 +60,14 @@ public class QuestManager : MonoBehaviour
 		}
 	}
 
-
+	/// <summary>
+	/// Current stored data of ALL quests.
+	/// </summary>
 	public Dictionary<int, QuestInfo> QuestData;
 
 	public int[] PinnedQuests = new int[] { -1, -1, -1 };
 
+	// Event for quest pinning.
 	public event Action onPinsUpdated;
 	public void OnPinsUpdatedInvoke()
 	{
@@ -62,6 +77,7 @@ public class QuestManager : MonoBehaviour
 		}
 	}
 
+	// Event for when quests update.
 	public event Action onQuestsUpdated;
 	void OnUpdateQuests()
 	{
@@ -77,6 +93,7 @@ public class QuestManager : MonoBehaviour
 	}
 
 
+	#region Awake
 	void Awake()
 	{
 		if (current != null && current != this)
@@ -88,7 +105,10 @@ public class QuestManager : MonoBehaviour
 			current = this;
 		}
 	}
+	#endregion
 
+
+	#region Start
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -119,50 +139,70 @@ public class QuestManager : MonoBehaviour
 		}
 		else
 		{
+			// Fail safe. just in case.
 			Debug.LogError("CATASTROPHIC ERROR - Quest sysyem cannot access save data!", this.gameObject);
 			QuestData = QuestDataSheet.QuestDefualt;
 			PinnedQuests = new int[] { -1, -1, -1 };
-
-
 		}
 	}
+	#endregion
 
+
+	#region OnDisable
 	void OnDisable()
 	{
 		SaveManager.current.onLoad -= OnSaveDataLoad;
 		// SaveManager.current.onSave -= OnSaveDataSave;
 
 	}
+	#endregion
 
-	// Update is called once per frame
-	void Update()
-	{
 
-	}
-
+	#region OnSaveDataLoad
 	private void OnSaveDataLoad()
 	{
 		QuestData = SaveData.current.Quests;
 	}
+	#endregion
 
 
-	private void SaveQuets()
+	#region SaveQuets
+	/// <summary>
+	/// Saves the quests to file.
+	/// </summary>
+	private void SaveQuets() // ? not sure why this is not used? might have a reason?
 	{
 		SaveData.current.Quests = QuestData;
 		SaveManager.current.ForceSave();
 	}
+	#endregion
 
 
-
-	public void UpdateQuest(int id, QuestInfo questInfo)
+	#region UpdateQuest (int uid, QuestInfo questInfo)
+	/// <summary>
+	/// Updates a quest using its UID (int) with a new QuestInfo.
+	/// </summary>
+	/// <param name="uid">The UID of the quest.</param>
+	/// <param name="questInfo">The new data to replace the current data of the quest.</param>
+	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
+	[Obsolete("Better alternative UpdateQuest(QuestInfo questInfo)", false)]
+	public void UpdateQuest(int uid, QuestInfo questInfo)
 	{
-		if (!QuestData.ContainsKey(id)) throw new NullReferenceException("Cannot find quest with that ID!");
+		if (!QuestData.ContainsKey(uid)) throw new NullReferenceException("Cannot find quest with that ID!");
 
-		QuestData[id] = questInfo;
+		QuestData[uid] = questInfo;
 
 		OnUpdateQuests();
 	}
+	#endregion
 
+
+	#region UpdateQuest (QuestInfo questInfo)
+	/// <summary>
+	/// Updates the quest using just the QuestInfo.
+	/// </summary>
+	/// <param name="questInfo">The quest and data you want to replace.</param>
+	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
 	public void UpdateQuest(QuestInfo questInfo)
 	{
 		if (!QuestData.ContainsKey(questInfo.UID)) throw new NullReferenceException("Cannot find quest with that ID!");
@@ -171,59 +211,99 @@ public class QuestManager : MonoBehaviour
 
 		OnUpdateQuests();
 	}
+	#endregion
 
-	public void UpdateQuest(int id, QuestState progress)
+
+	#region UpdateQuest (int uid, QuestState progress)
+	/// <summary>
+	/// Updates a quest's progress using its UID (int).
+	/// </summary>
+	/// <param name="uid">The UID of the quest.</param>
+	/// <param name="progress">The new progress of the quest.</param>
+	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
+	public void UpdateQuest(int uid, QuestState progress)
 	{
-		if (!QuestData.ContainsKey(id)) throw new NullReferenceException("Cannot find quest with that ID!");
+		if (!QuestData.ContainsKey(uid)) throw new NullReferenceException("Cannot find quest with that ID!");
 
-		QuestInfo questInfo = QuestData[id];
+		QuestInfo questInfo = QuestData[uid];
 
 		questInfo.State = progress;
 
-		QuestData[id] = questInfo;
+		QuestData[uid] = questInfo;
 
 		OnUpdateQuests();
 	}
+	#endregion
 
-	public void UpdateQuest(int id, int currentState)
+
+	#region UpdateQuest (int id, int currentState)
+	/// <summary>
+	/// Updates a quest's currentState using its UID (int).
+	/// </summary>
+	/// <param name="uid">The UID of the quest.</param>
+	/// <param name="currentState">The new state of the quest.</param>
+	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
+	public void UpdateQuest(int uid, int currentState)
 	{
-		if (!QuestData.ContainsKey(id)) throw new NullReferenceException("Cannot find quest with that ID!");
+		if (!QuestData.ContainsKey(uid)) throw new NullReferenceException("Cannot find quest with that ID!");
 
-		QuestInfo questInfo = QuestData[id];
+		QuestInfo questInfo = QuestData[uid];
 
 		questInfo.CurrentProgress = currentState;
 
-		QuestData[id] = questInfo;
+		QuestData[uid] = questInfo;
 
 		OnUpdateQuests();
 	}
+	#endregion
 
-	public void AcceptQuest(int id)
+
+	#region AcceptQuest
+	/// <summary>
+	/// Accepts the quest.
+	/// </summary>
+	/// <param name="uid">The UID of the quest to accept.</param>
+	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
+	public void AcceptQuest(int uid)
 	{
-		if (!QuestData.ContainsKey(id)) throw new NullReferenceException("Cannot find quest with that ID!");
+		if (!QuestData.ContainsKey(uid)) throw new NullReferenceException("Cannot find quest with that ID!");
 
-		QuestInfo questInfo = QuestData[id];
+		QuestInfo questInfo = QuestData[uid];
 
 		questInfo.State = QuestState.Accepted;
 		// questInfo.CurrentProgress = 1;
 
-		QuestData[id] = questInfo;
+		QuestData[uid] = questInfo;
 
 		OnUpdateQuests();
 	}
+	#endregion
 
 
-
+	#region 
 #nullable enable
-	public QuestInfo? GetQuestInfo(int id)
+	/// <summary>
+	/// Gets the QuestInfo using the UID.
+	/// </summary>
+	/// <param name="uid">The unique id of the quest to find.</param>
+	/// <returns>The QuestInfo of the quest, this CAN be null.</returns>
+	public QuestInfo? GetQuestInfo(int uid)
 	{
-		if (QuestData.ContainsKey(id))
-			return QuestData[id];
+		if (QuestData.ContainsKey(uid))
+			return QuestData[uid];
 		else
 			return null;
 	}
 #nullable disable
+	#endregion
 
+
+	#region CopyQuests
+	/// <summary>
+	/// Copts a Dictionary<int, QuestInfo> to another Dictionary.
+	/// </summary>
+	/// <param name="dataToCopy">The dictionary you wish to copy.</param>
+	/// <param name="Target">The dictionary to copy to.</param>
 	public static void CopyQuests(Dictionary<int, QuestInfo> dataToCopy, ref Dictionary<int, QuestInfo> Target)
 	{
 		var originalDictionary = dataToCopy;
@@ -232,8 +312,15 @@ public class QuestManager : MonoBehaviour
 			x => (QuestInfo)x.Value.Clone()  // Do the copy how you want
 		);
 	}
+	#endregion
 
+	#region 
 #nullable enable
+	/// <summary>
+	/// Gets the task display from the quest info.
+	/// </summary>
+	/// <param name="quest">The quest info to get the task from.</param>
+	/// <returns>A text for display.</returns>
 	public static string? GetTask(QuestInfo quest)
 	{
 		if (quest.CurrentProgress >= quest.Tasks.Length)
@@ -244,7 +331,15 @@ public class QuestManager : MonoBehaviour
 		return quest.Tasks[quest.CurrentProgress];
 	}
 #nullable disable
+	#endregion
 
+
+	#region CompleateQuestTask
+	/// <summary>
+	/// Completes the task with the UID.
+	/// </summary>
+	/// <param name="questID">The UID of the quest to complete.</param>
+	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
 	public void CompleateQuestTask(int questID)
 	{
 		if (!QuestData.ContainsKey(questID)) throw new NullReferenceException("Cannot find quest with that ID!");
@@ -261,7 +356,15 @@ public class QuestManager : MonoBehaviour
 
 		UpdateQuest(questInfo);
 	}
+	#endregion
 
+
+	#region PinQuest
+	/// <summary>
+	/// Pins the quest with the UID.
+	/// </summary>
+	/// <param name="questUID">The UID of the quest you want to pin.</param>
+	/// <returns>True if the operation was successful.</returns>
 	public bool PinQuest(int questUID)
 	{
 		if (PinnedQuests.Contains(-1))
@@ -311,7 +414,14 @@ public class QuestManager : MonoBehaviour
 
 		return false;
 	}
+	#endregion
 
+
+	#region UnPinQuest
+	/// <summary>
+	/// Unpins a quest with the UID.
+	/// </summary>
+	/// <param name="questUID">The UID of the quest you wish to unpin.</param>
 	public void UnPinQuest(int questUID)
 	{
 		if (PinnedQuests[0] == questUID)
@@ -329,7 +439,15 @@ public class QuestManager : MonoBehaviour
 
 		OnPinsUpdatedInvoke();
 	}
+	#endregion
 
+
+	#region CheckQuestIsPinned
+	/// <summary>
+	/// Checks if the quest with the UID is pinned.
+	/// </summary>
+	/// <param name="questUID">The UID to check for.</param>
+	/// <returns>True if the quest is pinned.</returns>
 	public bool CheckQuestIsPinned(int questUID)
 	{
 		if (PinnedQuests.Contains(questUID))
@@ -341,8 +459,15 @@ public class QuestManager : MonoBehaviour
 			return false;
 		}
 	}
+	#endregion
 
 
+	#region GetQuestsForHub
+	/// <summary>
+	/// Gets all the quests that are ment to be on that hub that have not been accepted yet.
+	/// </summary>
+	/// <param name="HubID">The UID of the hub.</param>
+	/// <returns>List of QuestInfos of avalible quests for that hub.</returns>
 	public List<QuestInfo> GetQuestsForHub(int HubID)
 	{
 		List<QuestInfo> infos = new List<QuestInfo>();
@@ -357,5 +482,12 @@ public class QuestManager : MonoBehaviour
 
 		return infos;
 	}
-
+	#endregion
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

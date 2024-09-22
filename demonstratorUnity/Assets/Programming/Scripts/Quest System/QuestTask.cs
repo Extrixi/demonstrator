@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.Events;
 using static QuestManager;
 
+/// <summary>
+/// A task for use to link a quest to a task / script using events. (unity event).
+/// </summary>
 public class QuestTask : MonoBehaviour
 {
 	public int QuestUID;
@@ -90,3 +93,10 @@ public class QuestTask : MonoBehaviour
 		QuestManager.current.CompleateQuestTask(QuestUID);
 	}
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

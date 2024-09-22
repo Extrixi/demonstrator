@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// allows scrolling and zoming on the travel board.
+/// </summary>
 public class ScrollZoom : MonoBehaviour
 {
 	public RectTransform ObjectToScale;
@@ -32,3 +35,10 @@ public class ScrollZoom : MonoBehaviour
 		ObjectToScale.localScale = Vector3.Lerp(StartScale, EndScale, _currentZoomAmmount);
 	}
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|
