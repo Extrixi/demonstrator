@@ -5,12 +5,16 @@ using TMPro;
 using UnityEngine;
 using static QuestManager;
 
+/// <summary>
+/// Displays the pinned quest's tasks. Currently up to 3.
+/// </summary>
 public class DisplayQuests : MonoBehaviour
 {
 	public TMP_Text QuestTraker;
 
-	int[] _pinnedQuests = new int[] { -1, -1, -1 };
+	private int[] _pinnedQuests = new int[] { -1, -1, -1 };
 
+	#region Start
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -22,7 +26,9 @@ public class DisplayQuests : MonoBehaviour
 		}
 
 	}
+	#endregion
 
+	#region OnDisable
 	void OnDisable()
 	{
 		if (QuestManager.current != null)
@@ -31,14 +37,14 @@ public class DisplayQuests : MonoBehaviour
 			QuestManager.current.onQuestsUpdated -= DisplayQuestsFromData;
 		}
 	}
+	#endregion
 
-	// Update is called once per frame
-	void Update()
-	{
 
-	}
-
-	void DisplayQuestsFromData()
+	#region DisplayQuestsFromData
+	/// <summary>
+	/// Displays the quest tasks. Needs to be called when a quest is updated.
+	/// </summary>
+	private void DisplayQuestsFromData()
 	{
 		List<string> display = new List<string> { $"Quests:\n" };
 
@@ -92,4 +98,12 @@ public class DisplayQuests : MonoBehaviour
 
 		QuestTraker.text = Comb;
 	}
+	#endregion
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|
