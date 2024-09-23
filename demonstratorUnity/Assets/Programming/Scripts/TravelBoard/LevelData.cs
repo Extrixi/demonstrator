@@ -161,6 +161,18 @@ public static class LevelData
 		{
 			new IDKey(1),
 			new LevelInfo(LevelType.Level, 1, -1, "Hub_1_Dunfall", "Hub", "Dunfall")
+		},
+		{
+			new IDKey(1,1),
+			new LevelInfo(LevelType.Level, 1, 1, "Level_1.1_TheForge", "Level", "TheForge")
+		},
+		{
+			new IDKey(1,2),
+			new LevelInfo(LevelType.Level, 1, 2, "Level_1.2_Docks", "Level", "Docks")
+		},
+		{
+			new IDKey(1,3),
+			new LevelInfo(LevelType.Level, 1, 3, "Level_1.3_Canal", "Level", "Canal")
 		}
 	};
 
