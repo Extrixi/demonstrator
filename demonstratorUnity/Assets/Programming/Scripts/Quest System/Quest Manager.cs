@@ -78,8 +78,8 @@ public class QuestManager : MonoBehaviour
 	}
 
 	// Event for when quests update.
-	public event Action onQuestsUpdated;
-	void OnUpdateQuests()
+	public event Action<int> onQuestsUpdated;
+	void OnUpdateQuests(int UID = -1)
 	{
 		//SaveData.current.Quests = QuestData;
 		CopyQuests(QuestData, ref SaveData.current.Quests);
@@ -88,7 +88,7 @@ public class QuestManager : MonoBehaviour
 
 		if (onQuestsUpdated != null)
 		{
-			onQuestsUpdated.Invoke();
+			onQuestsUpdated.Invoke(UID);
 		}
 	}
 
@@ -192,7 +192,7 @@ public class QuestManager : MonoBehaviour
 
 		QuestData[uid] = questInfo;
 
-		OnUpdateQuests();
+		OnUpdateQuests(uid);
 	}
 	#endregion
 
@@ -209,7 +209,7 @@ public class QuestManager : MonoBehaviour
 
 		QuestData[questInfo.UID] = questInfo;
 
-		OnUpdateQuests();
+		OnUpdateQuests(questInfo.UID);
 	}
 	#endregion
 
@@ -219,19 +219,19 @@ public class QuestManager : MonoBehaviour
 	/// Updates a quest's progress using its UID (int).
 	/// </summary>
 	/// <param name="uid">The UID of the quest.</param>
-	/// <param name="progress">The new progress of the quest.</param>
+	/// <param name="state">The new progress of the quest.</param>
 	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
-	public void UpdateQuest(int uid, QuestState progress)
+	public void UpdateQuest(int uid, QuestState state)
 	{
 		if (!QuestData.ContainsKey(uid)) throw new NullReferenceException("Cannot find quest with that ID!");
 
 		QuestInfo questInfo = QuestData[uid];
 
-		questInfo.State = progress;
+		questInfo.State = state;
 
 		QuestData[uid] = questInfo;
 
-		OnUpdateQuests();
+		OnUpdateQuests(uid);
 	}
 	#endregion
 
@@ -241,19 +241,19 @@ public class QuestManager : MonoBehaviour
 	/// Updates a quest's currentState using its UID (int).
 	/// </summary>
 	/// <param name="uid">The UID of the quest.</param>
-	/// <param name="currentState">The new state of the quest.</param>
+	/// <param name="currentProgress">The new state of the quest.</param>
 	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
-	public void UpdateQuest(int uid, int currentState)
+	public void UpdateQuest(int uid, int currentProgress)
 	{
 		if (!QuestData.ContainsKey(uid)) throw new NullReferenceException("Cannot find quest with that ID!");
 
 		QuestInfo questInfo = QuestData[uid];
 
-		questInfo.CurrentProgress = currentState;
+		questInfo.CurrentProgress = currentProgress;
 
 		QuestData[uid] = questInfo;
 
-		OnUpdateQuests();
+		OnUpdateQuests(uid);
 	}
 	#endregion
 
@@ -275,7 +275,7 @@ public class QuestManager : MonoBehaviour
 
 		QuestData[uid] = questInfo;
 
-		OnUpdateQuests();
+		OnUpdateQuests(uid);
 	}
 	#endregion
 
@@ -338,13 +338,13 @@ public class QuestManager : MonoBehaviour
 	/// <summary>
 	/// Completes the task with the UID.
 	/// </summary>
-	/// <param name="questID">The UID of the quest to complete.</param>
+	/// <param name="questUID">The UID of the quest to complete.</param>
 	/// <exception cref="NullReferenceException">Thrown when there is no quests matching that UID.</exception>
-	public void CompleateQuestTask(int questID)
+	public void CompleateQuestTask(int questUID)
 	{
-		if (!QuestData.ContainsKey(questID)) throw new NullReferenceException("Cannot find quest with that ID!");
+		if (!QuestData.ContainsKey(questUID)) throw new NullReferenceException("Cannot find quest with that ID!");
 
-		QuestInfo questInfo = GetQuestInfo(questID).Value;
+		QuestInfo questInfo = GetQuestInfo(questUID).Value;
 
 		questInfo.CurrentProgress++;
 
@@ -367,6 +367,8 @@ public class QuestManager : MonoBehaviour
 	/// <returns>True if the operation was successful.</returns>
 	public bool PinQuest(int questUID)
 	{
+		if (CheckQuestIsPinned(questUID)) return false;
+
 		if (PinnedQuests.Contains(-1))
 		{
 			if (PinnedQuests[0] == -1)

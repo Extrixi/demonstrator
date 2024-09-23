@@ -34,14 +34,14 @@ public class QuestBoardItem : MonoBehaviour
 
 	}
 
-	public void SetUpItem(int UID)
+	public void SetUpItem(int uid)
 	{
-		QuestUID = UID;
+		QuestUID = uid;
 
-		OnQuestUpDated();
+		OnQuestUpDated(uid);
 	}
 
-	public void OnQuestUpDated()
+	public void OnQuestUpDated(int uid)
 	{
 		if (QuestManager.current != null)
 		{

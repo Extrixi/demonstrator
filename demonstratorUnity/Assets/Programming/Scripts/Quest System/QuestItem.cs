@@ -29,14 +29,8 @@ public class QuestItem : MonoBehaviour
 		if (SaveManager.current != null)
 		{
 			QuestManager.current.onPinsUpdated += OnSaveDataChanged;
-			QuestManager.current.onQuestsUpdated += OnSaveDataChanged;
+			QuestManager.current.onQuestsUpdated += OnQuestsChanged;
 		}
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-
 	}
 
 	void OnDisable()
@@ -44,8 +38,13 @@ public class QuestItem : MonoBehaviour
 		if (SaveManager.current != null)
 		{
 			QuestManager.current.onPinsUpdated += OnSaveDataChanged;
-			QuestManager.current.onQuestsUpdated += OnSaveDataChanged;
+			QuestManager.current.onQuestsUpdated += OnQuestsChanged;
 		}
+	}
+
+	private void OnQuestsChanged(int uid)
+	{
+		OnSaveDataChanged();
 	}
 
 	#region SetUpQuestItem

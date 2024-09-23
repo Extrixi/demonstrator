@@ -21,7 +21,7 @@ public class DisplayQuests : MonoBehaviour
 		if (QuestManager.current != null)
 		{
 			QuestManager.current.onPinsUpdated += DisplayQuestsFromData;
-			QuestManager.current.onQuestsUpdated += DisplayQuestsFromData;
+			QuestManager.current.onQuestsUpdated += QuestsUpdated;
 			DisplayQuestsFromData();
 		}
 
@@ -34,11 +34,15 @@ public class DisplayQuests : MonoBehaviour
 		if (QuestManager.current != null)
 		{
 			QuestManager.current.onPinsUpdated -= DisplayQuestsFromData;
-			QuestManager.current.onQuestsUpdated -= DisplayQuestsFromData;
+			QuestManager.current.onQuestsUpdated -= QuestsUpdated;
 		}
 	}
 	#endregion
 
+	private void QuestsUpdated(int uid)
+	{
+		DisplayQuestsFromData();
+	}
 
 	#region DisplayQuestsFromData
 	/// <summary>
