@@ -34,7 +34,9 @@ public class UIForSaveDy : Editor
 // ! ===============================
 #endif
 
-
+/// <summary>
+/// Save File Dycrypt. (SFD)
+/// </summary>
 public class SaveDy : MonoBehaviour
 {
 	// Start is called before the first frame update
@@ -106,3 +108,10 @@ public class SaveDy : MonoBehaviour
 
 	}
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

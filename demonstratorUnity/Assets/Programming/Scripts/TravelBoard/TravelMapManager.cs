@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Manages the tavel board UI.
+/// </summary>
 public class TravelMapManager : MonoBehaviour
 {
 	public static TravelMapManager Current { private set; get; }
@@ -135,3 +138,10 @@ public class TravelMapManager : MonoBehaviour
 		}
 	}
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

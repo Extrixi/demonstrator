@@ -4,24 +4,27 @@ using UnityEngine;
 
 public class LookController : MonoBehaviour
 {
+	[Header("If this script can run and enables the camera")]
 	public bool IsEnabled = true;
 
+	[Header("If the looking is frozen")]
 	public bool IsLocked = false;
 
 
 	public Transform CameraHolder;
 
-	public float Sense = 1f;
+	// TODO make this use save data sens so player can change and save it.
+	public float Sensitivity = 1f;
 
+
+	// refs.
 	private float _yRotation;
 
 	private Camera cam;
 
 
 
-
-	// Start is called before the first frame update
-	void Start()
+	void Awake()
 	{
 		cam = Camera.main;
 	}
@@ -33,18 +36,26 @@ public class LookController : MonoBehaviour
 
 		if (IsLocked) return;
 
-		// TODO very simple 3rd person cam. planning to replace with the cinimachine version. this sucks.
+
 
 		// dont bother. verysimple rotate camera based on inputs from mouse axis.
+		// I wont. :3
 
 		Vector2 MouseLook = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y"));
 
-		_yRotation -= MouseLook.y * Sense;
+		_yRotation -= MouseLook.y * Sensitivity;
 
 		_yRotation = Mathf.Clamp(_yRotation, -90, 90);
 
-		CameraHolder.Rotate(transform.up * MouseLook.x * Sense);
+		CameraHolder.Rotate(transform.up * MouseLook.x * Sensitivity);
 
 		CameraHolder.rotation = Quaternion.Euler(_yRotation, CameraHolder.rotation.eulerAngles.y, 0);
 	}
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

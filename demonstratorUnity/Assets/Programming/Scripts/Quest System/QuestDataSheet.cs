@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using static QuestManager;
 
+/// <summary>
+/// The core data of quests.
+/// </summary>
 public class QuestDataSheet : MonoBehaviour
 {
+	// TODO make this a object on the persistant object so designers can make more items if needed.
+
 	/// <summary>
 	/// The key is the UID for the quests. The quest info is the quest itself.
 	/// </summary>
@@ -20,3 +25,10 @@ public class QuestDataSheet : MonoBehaviour
 	};
 
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

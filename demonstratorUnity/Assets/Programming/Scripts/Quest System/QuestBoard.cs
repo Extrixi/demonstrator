@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using static QuestManager;
 
+/// <summary>
+/// Questboard for Hubs, this displays quests the player can accept.
+/// </summary>
 public class QuestBoard : MonoBehaviour
 {
 	public GameObject QuestBoardItem;
@@ -40,13 +43,6 @@ public class QuestBoard : MonoBehaviour
 	}
 
 
-	void OnDisable()
-	{
-		// if (QuestManager.current != null)
-		// {
-		// 	QuestManager.current.onQuestsUpdated -= UpdateUI;
-		// }
-	}
 
 	// Update is called once per frame
 	void Update()
@@ -61,12 +57,6 @@ public class QuestBoard : MonoBehaviour
 
 
 	}
-
-	// public void UpdateUI()
-	// {
-	// 	if (!_questManagerExsists) return;
-
-	// }
 
 	public void GenerateUI()
 	{
@@ -97,3 +87,10 @@ public class QuestBoard : MonoBehaviour
 		_isVisible = !_isVisible;
 	}
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

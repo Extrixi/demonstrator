@@ -34,14 +34,14 @@ public class QuestBoardItem : MonoBehaviour
 
 	}
 
-	public void SetUpItem(int UID)
+	public void SetUpItem(int uid)
 	{
-		QuestUID = UID;
+		QuestUID = uid;
 
-		OnQuestUpDated();
+		OnQuestUpDated(uid);
 	}
 
-	public void OnQuestUpDated()
+	public void OnQuestUpDated(int uid)
 	{
 		if (QuestManager.current != null)
 		{
@@ -67,3 +67,10 @@ public class QuestBoardItem : MonoBehaviour
 		}
 	}
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

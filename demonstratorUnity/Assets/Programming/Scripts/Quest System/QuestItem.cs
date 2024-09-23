@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using static QuestManager;
 
+/// <summary>
+/// Quest item for use in the quest manager UI.
+/// </summary>
 public class QuestItem : MonoBehaviour
 {
 	public TMP_Text Text;
@@ -26,14 +29,8 @@ public class QuestItem : MonoBehaviour
 		if (SaveManager.current != null)
 		{
 			QuestManager.current.onPinsUpdated += OnSaveDataChanged;
-			QuestManager.current.onQuestsUpdated += OnSaveDataChanged;
+			QuestManager.current.onQuestsUpdated += OnQuestsChanged;
 		}
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-
 	}
 
 	void OnDisable()
@@ -41,10 +38,20 @@ public class QuestItem : MonoBehaviour
 		if (SaveManager.current != null)
 		{
 			QuestManager.current.onPinsUpdated += OnSaveDataChanged;
-			QuestManager.current.onQuestsUpdated += OnSaveDataChanged;
+			QuestManager.current.onQuestsUpdated += OnQuestsChanged;
 		}
 	}
 
+	private void OnQuestsChanged(int uid)
+	{
+		OnSaveDataChanged();
+	}
+
+	#region SetUpQuestItem
+	/// <summary>
+	/// Initilizes this quest item using the given quest UID.
+	/// </summary>
+	/// <param name="questUID">The UID of the quest this is ment to represent.</param>
 	public void SetUpQuestItem(int questUID)
 	{
 		QuestUID = questUID;
@@ -61,7 +68,13 @@ public class QuestItem : MonoBehaviour
 		OnSaveDataChanged();
 
 	}
+	#endregion
 
+
+	#region TogglePin
+	/// <summary>
+	/// Toggles the quest being pinned.
+	/// </summary>
 	public void TogglePin()
 	{
 		if (IsPinned)
@@ -73,7 +86,10 @@ public class QuestItem : MonoBehaviour
 			PinQuest();
 		}
 	}
+	#endregion
 
+
+	#region PinQuest // i will not summerise. it is 3am.
 	public void PinQuest()
 	{
 		if (IsPinned) return;
@@ -85,7 +101,10 @@ public class QuestItem : MonoBehaviour
 		ButtonText.text = "Un-Pin Quest";
 
 	}
+	#endregion
 
+
+	#region UnPinQuest
 	public void UnPinQuest()
 	{
 		if (!IsPinned) return;
@@ -97,8 +116,15 @@ public class QuestItem : MonoBehaviour
 		ButtonText.text = "Pin Quest";
 
 	}
+	#endregion
 
+
+	#region OnSaveDataChanged
 	// so when quest data changes.
+	// * this was done before the new Quest system events were made.
+	/// <summary>
+	/// called when save data is changed. Updates the quest.
+	/// </summary>
 	private void OnSaveDataChanged()
 	{
 		if (QuestManager.current != null)
@@ -148,4 +174,12 @@ public class QuestItem : MonoBehaviour
 
 		ButtonText.text = IsPinned ? "Un-Pin Quest" : "Pin Quest";
 	}
+	#endregion
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

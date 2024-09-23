@@ -4,28 +4,28 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
 
+/// <summary>
+/// Sends the spline container atteched to this object to the grind system.
+/// </summary>
 public class GrindRail : MonoBehaviour
 {
+
 	public SplineContainer SplineContainer;
 
 
 #if UNITY_EDITOR
+	#region Debug display
 	[Header("DEBUGGING")]
 	public bool DebugEnabled = false;
 
 	public Vector3 BluePos = Vector3.zero;
+	#endregion
 #endif
 
 	// Start is called before the first frame update
 	void Start()
 	{
 		SplineContainer = GetComponent<SplineContainer>();
-
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
 
 	}
 
@@ -41,6 +41,7 @@ public class GrindRail : MonoBehaviour
 	}
 
 #if UNITY_EDITOR
+	#region Debug
 	void OnDrawGizmos()
 	{
 
@@ -82,5 +83,13 @@ public class GrindRail : MonoBehaviour
 		Gizmos.color = Color.blue;
 		Gizmos.DrawSphere(BluePos, 0.5f);
 	}
+	#endregion
 #endif
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|

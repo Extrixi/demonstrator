@@ -8,6 +8,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// The debug console, this handles the UI and commands.
+/// </summary>
 public class DebugConsole : MonoBehaviour
 {
 	public static DebugConsole Instance;
@@ -467,3 +470,10 @@ public class DebugConsole : MonoBehaviour
 		return 1;
 	}
 }
+
+//      _                 _ _                     
+//     | |               (_) |                    
+//   __| | ___  _ __ ___  _| |__  _ __ ___  _ __  
+//  / _` |/ _ \| '_ ` _ \| | '_ \| '__/ _ \| '_ \ 
+// | (_| | (_) | | | | | | | |_) | | | (_) | | | |
+//  \__,_|\___/|_| |_| |_|_|_.__/|_|  \___/|_| |_|
